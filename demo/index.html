@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../src/js/rulez.js"></script>
+    <link type="text/css" rel="stylesheet" href="demo.css">
+    <link type="text/css" rel="stylesheet" href="../src/css/rulez-black.css">
+</head>
+<body style="margin: 0;">
+<div class="black-rect"></div>
+<div class="ruler-horizontal">
+    <svg id="svgH" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="ruler-vertical">
+    <svg id="svgV" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="content">
+    <div id="scroll" style="">
+        <div style="width: 90000000px; height: 90000000px;"></div>
+    </div>
+    <script>
+
+        var rulezH = new Rulez({
+            element: document.getElementById('svgH'),
+            layout: 'horizontal'
+        });
+        rulezH.render();
+        var rulezV = new Rulez({
+            element: document.getElementById('svgV'),
+            layout: 'vertical',
+            texts: [
+                {
+                    pixelGap: 100,
+                    rotation: 90,
+                    offset: 20,
+                    className: 'rulez-text',
+                    type: 'text'
+                }
+            ]
+        });
+        rulezV.render();
+        var scroll = document.getElementById('scroll');
+        scroll.addEventListener('scroll', function () {
+            rulezH.scrollTo(scroll.scrollLeft);
+            rulezV.scrollTo(scroll.scrollTop);
+        })
+    </script>
+</div>
+
+</body>
+</html>
