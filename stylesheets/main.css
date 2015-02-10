@@ -1,0 +1,62 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.ruler-vertical {
+    position: fixed;
+    top: 0;
+    z-index: 0;
+    width: 60px;
+    height: 100%;
+    padding-top: 60px;
+}
+
+.ruler-horizontal {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 60px;
+    padding-left: 60px;
+}
+
+.ruler-horizontal svg, .ruler-vertical svg {
+    width: 100%;
+    height: 100%;
+}
+
+.ruler-vertical div, .ruler-horizontal div {
+    width: 80px;
+    height: 80px;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    padding-top: 60px;
+    padding-left: 60px;
+    position: fixed;
+}
+
+#scroll {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+.rulez-line {
+    stroke: grey;
+    stroke-width: 1
+}
+
+.rulez-rect {
+    fill: grey
+}
+
+.rulez-text {
+    font-size: 8px;
+    fill: #d3d3d3
+}

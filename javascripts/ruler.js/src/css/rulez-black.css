@@ -1,0 +1,12 @@
+.rulez-line{
+    stroke: grey;
+    stroke-width:1;
+}
+.rulez-rect{
+    fill: grey;
+}
+
+.rulez-text{
+    font-size: 8px;
+    fill: lightgray;
+}
