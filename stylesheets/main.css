@@ -11,7 +11,7 @@ html, body {
     z-index: 0;
     width: 60px;
     height: 100%;
-    padding-top: 60px;
+    padding-top: 20px;
 }
 
 .ruler-horizontal {
@@ -20,7 +20,7 @@ html, body {
     z-index: 1;
     width: 100%;
     height: 60px;
-    padding-left: 60px;
+    padding-left: 20px;
 }
 
 .ruler-horizontal svg, .ruler-vertical svg {
@@ -48,15 +48,24 @@ html, body {
 }
 
 .rulez-line {
-    stroke: grey;
+    stroke: #b5e853;
     stroke-width: 1
 }
 
 .rulez-rect {
-    fill: grey
+    fill: #b5e853
 }
 
 .rulez-text {
     font-size: 8px;
-    fill: #d3d3d3
+    fill: #b5e853
+}
+
+.green-square{
+    background-color: #b5e853;
+    width: 20px;
+    height: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
