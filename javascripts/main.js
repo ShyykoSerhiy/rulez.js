@@ -1,7 +1,16 @@
 window.addEventListener('load', function () {
   var rulezH = new Rulez({
     element: document.getElementById('svgH'),
-    layout: 'horizontal'
+    layout: 'horizontal',
+    texts: [
+      {
+        pixelGap: 100,
+        offset: 30,
+        rotation: 0,
+        className: 'rulez-text',
+        type: 'text'
+      }
+    ]
   });
   rulezH.render();
   var rulezV = new Rulez({
@@ -11,7 +20,7 @@ window.addEventListener('load', function () {
       {
         pixelGap: 100,
         rotation: 90,
-        offset: 20,
+        offset: 25,
         className: 'rulez-text',
         type: 'text'
       }
