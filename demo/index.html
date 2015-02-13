@@ -29,13 +29,13 @@
         var rulezV = new Rulez({
             element: document.getElementById('svgV'),
             layout: 'vertical',
+            textDefaults: {
+                rotation: 90
+            },
             texts: [
                 {
                     pixelGap: 100,
-                    rotation: 90,
-                    offset: 20,
-                    className: 'rulez-text',
-                    type: 'text'
+                    offset: 20
                 }
             ]
         });
