@@ -1,3 +1,5 @@
+/* jshint latedef:nofunc */
+/* jshint unused:false*/
 /**
  *
  * @param config
@@ -17,7 +19,6 @@ var Rulez = function (config) {
       className: 'rulez-rect'
     },
     textDefaults: {
-      strokeWidth: 1,
       rotation: 0,
       offset: 25,
       className: 'rulez-text'
@@ -58,6 +59,9 @@ var Rulez = function (config) {
 
   var texts = [];
 
+  /**
+   * Renders ruler inside svg element
+   */
   this.render = function () {
     c.divisions.forEach(function (entry) {
       if (entry.pixelGap > maxDistance) {
@@ -80,6 +84,10 @@ var Rulez = function (config) {
     });
   };
 
+  /**
+   * Scrolls ruler to specified position.
+   * @param pos left(or top for vertical rulers) position to scroll to.
+   */
   this.scrollTo = function (pos) {
     currentPosition = pos;
 
@@ -226,12 +234,9 @@ var Rulez = function (config) {
             mergeConfigs(def[param], cus[param]);
             break;
           default :
-            if (notOverrideDef && def[param]){
-              continue;
-            } else {
+            if (!(notOverrideDef && def[param])) {
               def[param] = cus[param];
             }
-            
         }
       }
     }

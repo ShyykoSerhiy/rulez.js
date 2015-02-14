@@ -60,6 +60,5 @@ module.exports = function (grunt) {
   matchdep.filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'cssmin']);
-
+  grunt.registerTask('default', ['jshint','uglify', 'cssmin']);
 };
