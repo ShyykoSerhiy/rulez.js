@@ -2,20 +2,20 @@
 
 Rulez.js is a javascript library for showing svg based customizable rulers. 
 
-##Bower package
+##Instalation
 
+Download the [minified library](https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js) or use bower to install it.
 ````sh
 bower install rulez.js
 ````
 
-##Usage
+and include it in your html.
 
-###Necessary files
-
-Download the [minified library](https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js) and include it in your html. Alternatively use bower to install it.
 ````html
 <script type="text/javascript" src="bower_components/rulez.js/dist/js/rulez.min.js"></script>
 ````
+
+##Usage
 
 ###Basic usage
 
@@ -38,8 +38,63 @@ rulez.render();
 ````
 ###Customizing rulers
 Internally rulez.js use default config, but you can override it by passing more parameters in constructor.
-There is only one limitation to remember : all maximum pixelGap used for divisions must be dividable by all other 
-pixelGaps used (pixelGaps of texts are included also).  
+There is only one limitation to remember : maximum pixelGap used for divisions must be dividable by all other 
+pixelGaps (pixelGaps of texts are included also). For example, next config is ok:
+````js
+var rulez = new Rulez({
+    ...
+    divisions: [
+        {
+            pixelGap: 25,
+            lineLength: 10
+        },
+        {
+            pixelGap: 100,
+            lineLength: 20
+        }
+    ],
+    texts: [
+        {
+            pixelGap: 5
+        },
+        {
+            pixelGap: 25
+        },
+        {
+            pixelGap: 50
+        }
+    ]
+});
+````  
+max pixelGap of divisions is 100 and it's dividable by every other pixelGap used in config(25, 5, 25, 50).
+Ruler with the next one config may be rendered incorrectly if scrollTo method is used:
+````js
+var rulez = new Rulez({
+    ...
+    divisions: [
+        {
+            pixelGap: 25,
+            lineLength: 10
+        },
+        {
+            pixelGap: 100,
+            lineLength: 20
+        }
+    ],
+    texts: [
+        {
+            pixelGap: 6
+        },
+        {
+            pixelGap: 25
+        },
+        {
+            pixelGap: 50
+        }
+    ]
+});
+```` 
+max pixelGap of divisions is 100 and it's NOT dividable by 6.
 
 ####Customizing divisions
 Divisions can be changed by providing array of divisions config objects
@@ -58,7 +113,7 @@ var rulez = new Rulez({
     ]
 });
 ````
-The code above means, that will be created with two different division types:
+The code above means that ruler will be created with two different division types:
  1. Long ones(20px) with big gap between them(100px).
  2. Short ones(10px) with small gap between them(25px)
 
@@ -86,7 +141,7 @@ var rulez = new Rulez({
 });
 ````
 
-The code above means, that will be created with two different texts types:
+The code above means that ruler will be created with two different texts types:
  1. Texts with big gap between them(100px).
  2. Texts with smaller gap between them(50px)
 
@@ -113,7 +168,7 @@ textDefaults: {
 ````
 
 ###Scrolling rullers to a specific position
-Every ruller can be scrolled to a speciffig postion using
+Every ruller can be scrolled to a specific position by using
 ````js
 ruler.scrollTo(<left (top for vertical rulers) position in pixels>);
 /* example */
