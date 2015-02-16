@@ -78,31 +78,13 @@
 
         <p>Horizontal ruler </p>
 
-        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> someSvgElement <span
-                class="pl-k">=</span> <span class="pl-s3">document</span>.<span
-                class="pl-s3">getElementById</span>(<span class="pl-s1"><span
-                class="pl-pds">'</span>someSvgElementId<span class="pl-pds">'</span></span>);
-<span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span
-                    class="pl-en">Rulez</span>({
-    element<span class="pl-k">:</span> someSvgElement,
-});
-rulez.render();</pre>
-        </div>
+        <iframe src="//jsfiddle.net/shyykoserhiy/1mfecoL6/embedded/" 
+                allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
         <p>Vertical ruler</p>
 
-        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> someSvgElement <span
-                class="pl-k">=</span> <span class="pl-s3">document</span>.<span
-                class="pl-s3">getElementById</span>(<span class="pl-s1"><span
-                class="pl-pds">'</span>someSvgElementId<span class="pl-pds">'</span></span>);
-<span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span
-                    class="pl-en">Rulez</span>({
-    element<span class="pl-k">:</span> someSvgElement,
-    layout<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>vertical<span
-                    class="pl-pds">'</span></span>
-});
-rulez.render();</pre>
-        </div>
+        <iframe src="//jsfiddle.net/shyykoserhiy/h23ynzLx/embedded/" allowfullscreen="allowfullscreen"
+                frameborder="0"></iframe>
 
         <h3>
             <a id="customizing-rulers" class="anchor" href="#customizing-rulers" aria-hidden="true"><span
@@ -178,21 +160,7 @@ rulez.render();</pre>
 
         <p>Divisions can be changed by providing array of divisions config objects</p>
 
-        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span
-                class="pl-k">new</span> <span class="pl-en">Rulez</span>({
-    ...
-    divisions<span class="pl-k">:</span> [
-        {
-            pixelGap<span class="pl-k">:</span> <span class="pl-c1">25</span>,
-            lineLength<span class="pl-k">:</span> <span class="pl-c1">10</span>
-        },
-        {
-            pixelGap<span class="pl-k">:</span> <span class="pl-c1">100</span>,
-            lineLength<span class="pl-k">:</span> <span class="pl-c1">20</span>
-        }
-    ]
-});</pre>
-        </div>
+        <iframe src="//jsfiddle.net/shyykoserhiy/0gejxn9e/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
         <p>The code above means that ruler will be created with two different division types:</p>
 
@@ -203,7 +171,8 @@ rulez.render();</pre>
 
         <p>Other parameters that can be changed are </p>
 
-        <div class="highlight highlight-js"><pre>    strokeWidth <span class="pl-k">:</span> <span
+        <div class="highlight highlight-js">
+            <pre>    strokeWidth <span class="pl-k">:</span> <span
                 class="pl-c1">1</span>,<span class="pl-c">// width of division</span>
     className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>someClassName<span
                     class="pl-pds">'</span></span>,<span class="pl-c">// css class applied to every division</span>
@@ -217,19 +186,7 @@ rulez.render();</pre>
 
         <p>Texts can be changed by providing array of texts config objects</p>
 
-        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span
-                class="pl-k">new</span> <span class="pl-en">Rulez</span>({
-    ...
-    texts<span class="pl-k">:</span> [
-        {
-            pixelGap<span class="pl-k">:</span> <span class="pl-c1">50</span>
-        },
-        {
-            pixelGap<span class="pl-k">:</span> <span class="pl-c1">100</span>
-        }
-    ]
-});</pre>
-        </div>
+        <iframe src="//jsfiddle.net/shyykoserhiy/nfnt3ogm/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
         <p>The code above means that ruler will be created with two different texts types:</p>
 
@@ -256,34 +213,16 @@ rulez.render();</pre>
             parameters on their own. Any parameters that can be used for divisions or texts are also applicable for
             default configs.</p>
 
-        <div class="highlight highlight-js"><pre>divisionDefaults<span class="pl-k">:</span> {
-    strokeWidth<span class="pl-k">:</span> <span class="pl-c1">1</span>,
-    type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rect<span
-                    class="pl-pds">'</span></span>,
-    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rulez-rect<span
-                    class="pl-pds">'</span></span>
-},
-textDefaults<span class="pl-k">:</span> {
-    rotation<span class="pl-k">:</span> <span class="pl-c1">0</span>,
-    offset<span class="pl-k">:</span> <span class="pl-c1">25</span>,
-    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rulez-text<span
-                    class="pl-pds">'</span></span>
-}</pre>
-        </div>
+        <iframe src="//jsfiddle.net/shyykoserhiy/z94n3z0s/1/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
         <h3>
             <a id="scrolling-rullers-to-a-specific-position" class="anchor"
                href="#scrolling-rullers-to-a-specific-position" aria-hidden="true"><span
                     class="octicon octicon-link"></span></a>Scrolling rullers to a specific position</h3>
 
-        <p>Every ruller can be scrolled to a specific position by using</p>
+        <p>Every ruller can be scrolled to a specific position by using scrollTo(position)</p>
 
-        <div class="highlight highlight-js"><pre>ruler.<span class="pl-s3">scrollTo</span>(<span
-                class="pl-k">&lt;</span>left (top <span class="pl-k">for</span> vertical rulers) position <span
-                class="pl-k">in</span> pixels<span class="pl-k">&gt;</span>);
-<span class="pl-c">/* example */</span>
-ruler.<span class="pl-s3">scrollTo</span>(<span class="pl-c1">100</span>);</pre>
-        </div>
+        <iframe width="100%" height="300" src="//jsfiddle.net/shyykoserhiy/897mb7bf/1/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
         <p><a href="http://opensource.org/licenses/mit-license.php">MIT License</a>.</p>
     </section>
