@@ -1,83 +1,120 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
+<head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="description" content="Rulez.js : Rulez.js is a javascript library for showing svg customizable rulers.">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/main.css">
+    <script src="javascripts/rulez.js/dist/js/rulez.min.js"></script>
+    <script src="javascripts/main.js"></script>
 
     <title>Rulez.js</title>
-  </head>
+</head>
 
-  <body>
+<body>
+<div class="ruler-horizontal">
+    <svg id="svgH" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="ruler-vertical">
+    <svg id="svgV" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+    <header class="inner">
+        <a id="forkme_banner" href="https://github.com/ShyykoSerhiy/rulez.js">View on GitHub</a>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/ShyykoSerhiy/rulez.js">View on GitHub</a>
+        <h1 id="project_title">Rulez.js</h1>
 
-          <h1 id="project_title">Rulez.js</h1>
-          <h2 id="project_tagline">Rulez.js is a javascript library for showing svg customizable rulers.</h2>
+        <h2 id="project_tagline">Rulez.js is a javascript library for showing svg customizable rulers.</h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/ShyykoSerhiy/rulez.js/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/ShyykoSerhiy/rulez.js/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+        <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/ShyykoSerhiy/rulez.js/zipball/master">Download this
+                project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/ShyykoSerhiy/rulez.js/tarball/master">Download this
+                project as a tar.gz file</a>
+        </section>
+    </header>
+</div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+    <section id="main_content" class="inner">
         <h1>
-<a id="rulezjs" class="anchor" href="#rulezjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rulez.js</h1>
+            <a id="rulezjs" class="anchor" href="#rulezjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rulez.js
+        </h1>
 
-<p>Rulez.js is a javascript library for showing svg based customizable rulers. </p>
+        <p>Rulez.js is a javascript library for showing svg based customizable rulers. </p>
 
-<h2>
-<a id="instalation" class="anchor" href="#instalation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalation</h2>
+        <h2>
+            <a id="instalation" class="anchor" href="#instalation" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Instalation</h2>
 
-<p>Download the <a href="https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js">minified library</a> or use bower to install it.</p>
+        <p>Download the <a href="https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js">minified
+            library</a> or use bower to install it.</p>
 
-<div class="highlight highlight-sh"><pre>bower install rulez.js</pre></div>
+        <div class="highlight highlight-sh">
+            <pre>bower install rulez.js</pre>
+        </div>
 
-<p>and include it in your html.</p>
+        <p>and include it in your html.</p>
 
-<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>bower_components/rulez.js/dist/js/rulez.min.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+        <div class="highlight highlight-html">
+            <pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s1"><span
+                    class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> <span
+                    class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>bower_components/rulez.js/dist/js/rulez.min.js<span
+                    class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre>
+        </div>
 
-<h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+        <h2>
+            <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage
+        </h2>
 
-<h3>
-<a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic usage</h3>
+        <h3>
+            <a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Basic usage</h3>
 
-<p>Horizontal ruler </p>
+        <p>Horizontal ruler </p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> someSvgElement <span class="pl-k">=</span> <span class="pl-s3">document</span>.<span class="pl-s3">getElementById</span>(<span class="pl-s1"><span class="pl-pds">'</span>someSvgElementId<span class="pl-pds">'</span></span>);
-<span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> someSvgElement <span
+                class="pl-k">=</span> <span class="pl-s3">document</span>.<span
+                class="pl-s3">getElementById</span>(<span class="pl-s1"><span
+                class="pl-pds">'</span>someSvgElementId<span class="pl-pds">'</span></span>);
+<span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span
+                    class="pl-en">Rulez</span>({
     element<span class="pl-k">:</span> someSvgElement,
 });
-rulez.render();</pre></div>
+rulez.render();</pre>
+        </div>
 
-<p>Vertical ruler</p>
+        <p>Vertical ruler</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> someSvgElement <span class="pl-k">=</span> <span class="pl-s3">document</span>.<span class="pl-s3">getElementById</span>(<span class="pl-s1"><span class="pl-pds">'</span>someSvgElementId<span class="pl-pds">'</span></span>);
-<span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> someSvgElement <span
+                class="pl-k">=</span> <span class="pl-s3">document</span>.<span
+                class="pl-s3">getElementById</span>(<span class="pl-s1"><span
+                class="pl-pds">'</span>someSvgElementId<span class="pl-pds">'</span></span>);
+<span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span
+                    class="pl-en">Rulez</span>({
     element<span class="pl-k">:</span> someSvgElement,
-    layout<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>vertical<span class="pl-pds">'</span></span>
+    layout<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>vertical<span
+                    class="pl-pds">'</span></span>
 });
-rulez.render();</pre></div>
+rulez.render();</pre>
+        </div>
 
-<h3>
-<a id="customizing-rulers" class="anchor" href="#customizing-rulers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customizing rulers</h3>
+        <h3>
+            <a id="customizing-rulers" class="anchor" href="#customizing-rulers" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Customizing rulers</h3>
 
-<p>Internally rulez.js use default config, but you can override it by passing more parameters in constructor.
-There is only one limitation to remember : maximum pixelGap used for divisions must be dividable by all other 
-pixelGaps (pixelGaps of texts are included also). For example, next config is ok:</p>
+        <p>Internally rulez.js use default config, but you can override it by passing more parameters in constructor.
+            There is only one limitation to remember : maximum pixelGap used for divisions must be dividable by all
+            other
+            pixelGaps (pixelGaps of texts are included also). For example, next config is ok:</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span
+                class="pl-k">new</span> <span class="pl-en">Rulez</span>({
     ...
     divisions<span class="pl-k">:</span> [
         {
@@ -100,12 +137,14 @@ pixelGaps (pixelGaps of texts are included also). For example, next config is ok
             pixelGap<span class="pl-k">:</span> <span class="pl-c1">50</span>
         }
     ]
-});</pre></div>
+});</pre>
+        </div>
 
-<p>max pixelGap of divisions is 100 and it's dividable by every other pixelGap used in config(25, 5, 25, 50).
-Ruler with the next one config may be rendered incorrectly if scrollTo method is used:</p>
+        <p>max pixelGap of divisions is 100 and it's dividable by every other pixelGap used in config(25, 5, 25, 50).
+            Ruler with the next one config may be rendered incorrectly if scrollTo method is used:</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span
+                class="pl-k">new</span> <span class="pl-en">Rulez</span>({
     ...
     divisions<span class="pl-k">:</span> [
         {
@@ -128,16 +167,19 @@ Ruler with the next one config may be rendered incorrectly if scrollTo method is
             pixelGap<span class="pl-k">:</span> <span class="pl-c1">50</span>
         }
     ]
-});</pre></div>
+});</pre>
+        </div>
 
-<p>max pixelGap of divisions is 100 and it's NOT dividable by 6.</p>
+        <p>max pixelGap of divisions is 100 and it's NOT dividable by 6.</p>
 
-<h4>
-<a id="customizing-divisions" class="anchor" href="#customizing-divisions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customizing divisions</h4>
+        <h4>
+            <a id="customizing-divisions" class="anchor" href="#customizing-divisions" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Customizing divisions</h4>
 
-<p>Divisions can be changed by providing array of divisions config objects</p>
+        <p>Divisions can be changed by providing array of divisions config objects</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span
+                class="pl-k">new</span> <span class="pl-en">Rulez</span>({
     ...
     divisions<span class="pl-k">:</span> [
         {
@@ -149,27 +191,34 @@ Ruler with the next one config may be rendered incorrectly if scrollTo method is
             lineLength<span class="pl-k">:</span> <span class="pl-c1">20</span>
         }
     ]
-});</pre></div>
+});</pre>
+        </div>
 
-<p>The code above means that ruler will be created with two different division types:</p>
+        <p>The code above means that ruler will be created with two different division types:</p>
 
-<ol>
-<li>Long ones(20px) with big gap between them(100px).</li>
-<li>Short ones(10px) with small gap between them(25px)</li>
-</ol>
+        <ol>
+            <li>Long ones(20px) with big gap between them(100px).</li>
+            <li>Short ones(10px) with small gap between them(25px)</li>
+        </ol>
 
-<p>Other parameters that can be changed are </p>
+        <p>Other parameters that can be changed are </p>
 
-<div class="highlight highlight-js"><pre>    strokeWidth <span class="pl-k">:</span> <span class="pl-c1">1</span>,<span class="pl-c">// width of division</span>
-    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>someClassName<span class="pl-pds">'</span></span>,<span class="pl-c">// css class applied to every division</span>
-    type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rect<span class="pl-pds">'</span></span><span class="pl-c">// 'rect' or 'line': type of svg element used to render division</span></pre></div>
+        <div class="highlight highlight-js"><pre>    strokeWidth <span class="pl-k">:</span> <span
+                class="pl-c1">1</span>,<span class="pl-c">// width of division</span>
+    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>someClassName<span
+                    class="pl-pds">'</span></span>,<span class="pl-c">// css class applied to every division</span>
+    type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rect<span
+                    class="pl-pds">'</span></span><span class="pl-c">// 'rect' or 'line': type of svg element used to render division</span></pre>
+        </div>
 
-<h4>
-<a id="customizing-texts" class="anchor" href="#customizing-texts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customizing texts</h4>
+        <h4>
+            <a id="customizing-texts" class="anchor" href="#customizing-texts" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Customizing texts</h4>
 
-<p>Texts can be changed by providing array of texts config objects</p>
+        <p>Texts can be changed by providing array of texts config objects</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span
+                class="pl-k">new</span> <span class="pl-en">Rulez</span>({
     ...
     texts<span class="pl-k">:</span> [
         {
@@ -179,69 +228,88 @@ Ruler with the next one config may be rendered incorrectly if scrollTo method is
             pixelGap<span class="pl-k">:</span> <span class="pl-c1">100</span>
         }
     ]
-});</pre></div>
+});</pre>
+        </div>
 
-<p>The code above means that ruler will be created with two different texts types:</p>
+        <p>The code above means that ruler will be created with two different texts types:</p>
 
-<ol>
-<li>Texts with big gap between them(100px).</li>
-<li>Texts with smaller gap between them(50px)</li>
-</ol>
+        <ol>
+            <li>Texts with big gap between them(100px).</li>
+            <li>Texts with smaller gap between them(50px)</li>
+        </ol>
 
-<p>Other parameters that can be changed are </p>
+        <p>Other parameters that can be changed are </p>
 
-<div class="highlight highlight-js"><pre>    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>someClassName<span class="pl-pds">'</span></span><span class="pl-c">// css class applied to every text</span>
-    offset<span class="pl-k">:</span> <span class="pl-c1">20</span>,<span class="pl-c">//offsets of texts in pixels</span>
-    rotation<span class="pl-k">:</span><span class="pl-c1">90</span><span class="pl-c">//rotation in degrees of texts</span></pre></div>
+        <div class="highlight highlight-js"><pre>    className<span class="pl-k">:</span> <span class="pl-s1"><span
+                class="pl-pds">'</span>someClassName<span class="pl-pds">'</span></span><span class="pl-c">// css class applied to every text</span>
+    offset<span class="pl-k">:</span> <span class="pl-c1">20</span>,<span
+                    class="pl-c">//offsets of texts in pixels</span>
+    rotation<span class="pl-k">:</span><span class="pl-c1">90</span><span
+                    class="pl-c">//rotation in degrees of texts</span></pre>
+        </div>
 
-<h4>
-<a id="default-configs" class="anchor" href="#default-configs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Default configs</h4>
+        <h4>
+            <a id="default-configs" class="anchor" href="#default-configs" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Default configs</h4>
 
-<p>It's possible to use default configs that will used for all texts and divisions if they not specify parameters on their own. Any parameters that can be used for divisions or texts are also applicable for default configs.</p>
+        <p>It's possible to use default configs that will used for all texts and divisions if they not specify
+            parameters on their own. Any parameters that can be used for divisions or texts are also applicable for
+            default configs.</p>
 
-<div class="highlight highlight-js"><pre>divisionDefaults<span class="pl-k">:</span> {
+        <div class="highlight highlight-js"><pre>divisionDefaults<span class="pl-k">:</span> {
     strokeWidth<span class="pl-k">:</span> <span class="pl-c1">1</span>,
-    type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rect<span class="pl-pds">'</span></span>,
-    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rulez-rect<span class="pl-pds">'</span></span>
+    type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rect<span
+                    class="pl-pds">'</span></span>,
+    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rulez-rect<span
+                    class="pl-pds">'</span></span>
 },
 textDefaults<span class="pl-k">:</span> {
     rotation<span class="pl-k">:</span> <span class="pl-c1">0</span>,
     offset<span class="pl-k">:</span> <span class="pl-c1">25</span>,
-    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rulez-text<span class="pl-pds">'</span></span>
-}</pre></div>
+    className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rulez-text<span
+                    class="pl-pds">'</span></span>
+}</pre>
+        </div>
 
-<h3>
-<a id="scrolling-rullers-to-a-specific-position" class="anchor" href="#scrolling-rullers-to-a-specific-position" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scrolling rullers to a specific position</h3>
+        <h3>
+            <a id="scrolling-rullers-to-a-specific-position" class="anchor"
+               href="#scrolling-rullers-to-a-specific-position" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Scrolling rullers to a specific position</h3>
 
-<p>Every ruller can be scrolled to a specific position by using</p>
+        <p>Every ruller can be scrolled to a specific position by using</p>
 
-<div class="highlight highlight-js"><pre>ruler.<span class="pl-s3">scrollTo</span>(<span class="pl-k">&lt;</span>left (top <span class="pl-k">for</span> vertical rulers) position <span class="pl-k">in</span> pixels<span class="pl-k">&gt;</span>);
+        <div class="highlight highlight-js"><pre>ruler.<span class="pl-s3">scrollTo</span>(<span
+                class="pl-k">&lt;</span>left (top <span class="pl-k">for</span> vertical rulers) position <span
+                class="pl-k">in</span> pixels<span class="pl-k">&gt;</span>);
 <span class="pl-c">/* example */</span>
-ruler.<span class="pl-s3">scrollTo</span>(<span class="pl-c1">100</span>);</pre></div>
+ruler.<span class="pl-s3">scrollTo</span>(<span class="pl-c1">100</span>);</pre>
+        </div>
 
-<p><a href="http://opensource.org/licenses/mit-license.php">MIT License</a>.</p>
-      </section>
-    </div>
+        <p><a href="http://opensource.org/licenses/mit-license.php">MIT License</a>.</p>
+    </section>
+</div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+    <footer class="inner">
         <p class="copyright">Rulez.js maintained by <a href="https://github.com/ShyykoSerhiy">ShyykoSerhiy</a></p>
+
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+    </footer>
+</div>
 
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-59794134-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-59794134-1");
+        pageTracker._trackPageview();
+    } catch (err) {
+    }
+</script>
 
 
-  </body>
+</body>
 </html>

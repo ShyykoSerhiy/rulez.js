@@ -1,6 +1,6 @@
 {
   "name": "rulez.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "authors": [
     "Shyyko Serhiy <shyyko.serhiy@gmail.com>"
   ],
@@ -22,14 +22,14 @@
     "demo"
   ],
   "homepage": "https://github.com/ShyykoSerhiy/rulez.js",
-  "_release": "0.0.2",
+  "_release": "0.0.3",
   "_resolution": {
     "type": "version",
-    "tag": "0.0.2",
-    "commit": "c33e76519e26ca48dd4c8492a83f54b2ddb49b30"
+    "tag": "0.0.3",
+    "commit": "473e6400ec07cfd74794d5d1d58e7f2f9d2bc956"
   },
   "_source": "git://github.com/ShyykoSerhiy/rulez.js.git",
-  "_target": "~0.0.2",
-  "_originalSource": "ruler.js",
+  "_target": "~0.0.3",
+  "_originalSource": "rulez.js",
   "_direct": true
 }

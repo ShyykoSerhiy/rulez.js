@@ -38,6 +38,10 @@ html, body {
 }
 
 .rulez-text {
-    font-size: 8px;
+    font-size: 14px;
     fill: black
+}
+
+.rulez-grey {
+    fill: rgb(132,132,132);
 }

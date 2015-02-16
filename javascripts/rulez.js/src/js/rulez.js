@@ -1,3 +1,5 @@
+/* jshint latedef:nofunc */
+/* jshint unused:false*/
 /**
  *
  * @param config
@@ -11,39 +13,37 @@ var Rulez = function (config) {
     height: null,
     element: null,
     layout: 'horizontal',
+    divisionDefaults: {
+      strokeWidth: 1,
+      type: 'rect',
+      className: 'rulez-rect'
+    },
+    textDefaults: {
+      rotation: 0,
+      offset: 25,
+      className: 'rulez-text'
+    },
     divisions: [
       {
         pixelGap: 5,
-        lineLength: 5,
-        strokeWidth: 1,
-        type: 'rect'
+        lineLength: 5
       },
       {
         pixelGap: 25,
-        lineLength: 10,
-        strokeWidth: 1,
-        type: 'rect'
+        lineLength: 10
       },
       {
         pixelGap: 50,
-        lineLength: 15,
-        strokeWidth: 1,
-        type: 'rect'
+        lineLength: 15
       },
       {
         pixelGap: 100,
-        lineLength: 20,
-        strokeWidth: 1,
-        type: 'rect'
+        lineLength: 20
       }
     ],
     texts: [
       {
-        pixelGap: 100,
-        rotation: 0,
-        offset: 25,
-        className: 'rulez-text',
-        type: 'text'
+        pixelGap: 100
       }
     ]
   };
@@ -59,6 +59,9 @@ var Rulez = function (config) {
 
   var texts = [];
 
+  /**
+   * Renders ruler inside svg element
+   */
   this.render = function () {
     c.divisions.forEach(function (entry) {
       if (entry.pixelGap > maxDistance) {
@@ -81,6 +84,10 @@ var Rulez = function (config) {
     });
   };
 
+  /**
+   * Scrolls ruler to specified position.
+   * @param pos left(or top for vertical rulers) position to scroll to.
+   */
   this.scrollTo = function (pos) {
     currentPosition = pos;
 
@@ -214,23 +221,39 @@ var Rulez = function (config) {
     return c.layout === 'vertical';
   }
 
-  function mergeConfigs(def, cus) {
-    for (var param in def) {
-      if (def.hasOwnProperty(param) && cus.hasOwnProperty(param)) {
-        def[param] = cus[param];
-      }
+  function mergeConfigs(def, cus, notOverrideDef) {
+    if (!cus) {
+      return def;
     }
 
-    def.texts.forEach(function (entry) {
-      if (!entry.className) {
-        entry.className = 'rulez-text';
+    for (var param in cus) {
+      if (cus.hasOwnProperty(param)) {
+        switch (param) {
+          case 'divisionDefaults':
+          case 'textDefaults':
+            mergeConfigs(def[param], cus[param]);
+            break;
+          default :
+            if (!(notOverrideDef && def[param])) {
+              def[param] = cus[param];
+            }
+        }
       }
-    });
-    def.divisions.forEach(function (entry) {
-      if (!entry.className) {
-        entry.className = entry.type === 'line' ? 'rulez-line' : 'rulez-rect';
-      }
-    });
+    }
+    if (def.divisions) {
+      def.divisions.forEach(function (entry) {
+        mergeConfigs(entry, def.divisionDefaults, entry);
+        if (!entry.className) {
+          entry.className = entry.type === 'line' ? 'rulez-line' : 'rulez-rect';
+        }
+      });
+    }
+    if (def.texts) {
+      def.texts.forEach(function (entry) {
+        mergeConfigs(entry, def.textDefaults, entry);
+      });
+    }
+
     return def;
   }
 };
