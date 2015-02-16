@@ -37,19 +37,18 @@
 <p>Rulez.js is a javascript library for showing svg based customizable rulers. </p>
 
 <h2>
-<a id="bower-package" class="anchor" href="#bower-package" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bower package</h2>
+<a id="instalation" class="anchor" href="#instalation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalation</h2>
+
+<p>Download the <a href="https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js">minified library</a> or use bower to install it.</p>
 
 <div class="highlight highlight-sh"><pre>bower install rulez.js</pre></div>
 
-<h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
-
-<h3>
-<a id="necessary-files" class="anchor" href="#necessary-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Necessary files</h3>
-
-<p>Download the <a href="https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js">minified library</a> and include it in your html. Alternatively use bower to install it.</p>
+<p>and include it in your html.</p>
 
 <div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>bower_components/rulez.js/dist/js/rulez.min.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <h3>
 <a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic usage</h3>
@@ -75,8 +74,63 @@ rulez.render();</pre></div>
 <a id="customizing-rulers" class="anchor" href="#customizing-rulers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customizing rulers</h3>
 
 <p>Internally rulez.js use default config, but you can override it by passing more parameters in constructor.
-There is only one limitation to remember : all maximum pixelGap used for divisions must be dividable by all other 
-pixelGaps used (pixelGaps of texts are included also).  </p>
+There is only one limitation to remember : maximum pixelGap used for divisions must be dividable by all other 
+pixelGaps (pixelGaps of texts are included also). For example, next config is ok:</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+    ...
+    divisions<span class="pl-k">:</span> [
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">25</span>,
+            lineLength<span class="pl-k">:</span> <span class="pl-c1">10</span>
+        },
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">100</span>,
+            lineLength<span class="pl-k">:</span> <span class="pl-c1">20</span>
+        }
+    ],
+    texts<span class="pl-k">:</span> [
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">5</span>
+        },
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">25</span>
+        },
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">50</span>
+        }
+    ]
+});</pre></div>
+
+<p>max pixelGap of divisions is 100 and it's dividable by every other pixelGap used in config(25, 5, 25, 50).
+Ruler with the next one config may be rendered incorrectly if scrollTo method is used:</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+    ...
+    divisions<span class="pl-k">:</span> [
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">25</span>,
+            lineLength<span class="pl-k">:</span> <span class="pl-c1">10</span>
+        },
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">100</span>,
+            lineLength<span class="pl-k">:</span> <span class="pl-c1">20</span>
+        }
+    ],
+    texts<span class="pl-k">:</span> [
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">6</span>
+        },
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">25</span>
+        },
+        {
+            pixelGap<span class="pl-k">:</span> <span class="pl-c1">50</span>
+        }
+    ]
+});</pre></div>
+
+<p>max pixelGap of divisions is 100 and it's NOT dividable by 6.</p>
 
 <h4>
 <a id="customizing-divisions" class="anchor" href="#customizing-divisions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customizing divisions</h4>
@@ -97,7 +151,7 @@ pixelGaps used (pixelGaps of texts are included also).  </p>
     ]
 });</pre></div>
 
-<p>The code above means, that will be created with two different division types:</p>
+<p>The code above means that ruler will be created with two different division types:</p>
 
 <ol>
 <li>Long ones(20px) with big gap between them(100px).</li>
@@ -127,7 +181,7 @@ pixelGaps used (pixelGaps of texts are included also).  </p>
     ]
 });</pre></div>
 
-<p>The code above means, that will be created with two different texts types:</p>
+<p>The code above means that ruler will be created with two different texts types:</p>
 
 <ol>
 <li>Texts with big gap between them(100px).</li>
@@ -159,7 +213,7 @@ textDefaults<span class="pl-k">:</span> {
 <h3>
 <a id="scrolling-rullers-to-a-specific-position" class="anchor" href="#scrolling-rullers-to-a-specific-position" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scrolling rullers to a specific position</h3>
 
-<p>Every ruller can be scrolled to a speciffig postion using</p>
+<p>Every ruller can be scrolled to a specific position by using</p>
 
 <div class="highlight highlight-js"><pre>ruler.<span class="pl-s3">scrollTo</span>(<span class="pl-k">&lt;</span>left (top <span class="pl-k">for</span> vertical rulers) position <span class="pl-k">in</span> pixels<span class="pl-k">&gt;</span>);
 <span class="pl-c">/* example */</span>
@@ -177,7 +231,17 @@ ruler.<span class="pl-s3">scrollTo</span>(<span class="pl-c1">100</span>);</pre>
       </footer>
     </div>
 
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-59794134-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
 
   </body>
 </html>
