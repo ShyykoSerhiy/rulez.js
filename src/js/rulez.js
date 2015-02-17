@@ -47,41 +47,52 @@ var Rulez = function (config) {
       }
     ]
   };
+  /**
+   * result config
+   */
   var c = mergeConfigs(JSON.parse(JSON.stringify(defaultConfig)), config);
-
+  /**
+   * amount of additional(redundant) divisions on left and right (top, bottom) side of ruler
+   */
+  var additionalDivisionsAmount = 2;
+  /**
+   * main group (g svg element) that contains all divisions and texts
+   * @type {SVGGElement}
+   */
   var g = createGroup();
+  /**
+   * Array of arrays of all texts
+   * @type {Array.<Array.<SVGTextElement >>}
+   */
+  var texts = [];
+  /**
+   * Current position of ruler
+   * @type {number}
+   */
+  var currentPosition = 0;
+  /**
+   * Start position of drawing ruler
+   * @type {number}
+   */
+  var startPosition;
+  /**
+   * End position of drawing ruler
+   * @type {number}
+   */
+  var endPosition;
+
   c.width = c.width ? c.width : c.element.clientWidth;
   c.height = c.height ? c.height : c.element.clientHeight;
   c.element.appendChild(g);
+  var size = isVertical() ? c.height : c.width;
   var maxDistance = 0;
-
-  var currentPosition = 0;
-
-  var texts = [];
 
   /**
    * Renders ruler inside svg element
    */
   this.render = function () {
-    c.divisions.forEach(function (entry) {
-      if (entry.pixelGap > maxDistance) {
-        maxDistance = entry.pixelGap;
-      }
-    });
-    var additionalDivisionsAmount = 1;
-    var size = isVertical() ? c.height : c.width;
-    var endPosition = currentPosition + size + maxDistance * additionalDivisionsAmount;
-    var startPosition = currentPosition - currentPosition % maxDistance - maxDistance * additionalDivisionsAmount;
-
-    c.divisions.forEach(function (division) {
-      generateDivisions(startPosition, endPosition, division);
-    });
-    c.texts.forEach(function (textConfig) {
-      var additionalTextsAmount = getAdditionalTextsAmount(textConfig);
-      var endPosition = currentPosition + size + textConfig.pixelGap * additionalTextsAmount;
-      var startPosition = currentPosition - currentPosition % (textConfig.pixelGap) - textConfig.pixelGap * additionalTextsAmount;
-      texts.push(generateTexts(startPosition, endPosition, textConfig));
-    });
+    calculateStartEndPosition();
+    generateDivisionsAndTexts(startPosition, endPosition);
   };
 
   /**
@@ -101,16 +112,59 @@ var Rulez = function (config) {
       var textElements = texts[i];
       var offset = currentPosition % maxDistance;
       var startTextPos = currentPosition - offset;
-      var additionalTextsAmount = getAdditionalTextsAmount(textConfig);
       for (var j = 0; j < textElements.length; j++) {
         var textElement = textElements[j];
-        textElement.textContent = startTextPos + (j - additionalTextsAmount) * textConfig.pixelGap;
+        textElement.textContent = startTextPos + (j - additionalDivisionsAmount) * textConfig.pixelGap;
       }
     }
   };
 
-  function getAdditionalTextsAmount(config) {
-    return Math.floor(maxDistance / config.pixelGap) + 1;
+  /**
+   * Updates size with current clientWidth(height) in case it's bigger than previous one. 
+   * Only appends more divisions and texts if necessary. 
+   */
+  this.resize = function () {
+    var oldSize = size;
+    var newSize = isVertical() ? c.element.clientHeight : c.element.clientWidth;
+    if (oldSize !== newSize) {
+      if (oldSize > newSize) {
+        //todo remove redundant?
+      } else {
+        size = newSize;
+        var oldEndPosition = endPosition;
+        calculateStartEndPosition();
+        generateDivisionsAndTexts(oldEndPosition, endPosition);
+        this.scrollTo(currentPosition);
+      }
+    }
+  };
+
+  function calculateStartEndPosition() {
+    if (!maxDistance){
+      c.divisions.forEach(function (entry) {
+        if (entry.pixelGap > maxDistance) {
+          maxDistance = entry.pixelGap;
+        }
+      });
+    }
+    endPosition = size - (size % maxDistance) + maxDistance * additionalDivisionsAmount;
+    startPosition = -maxDistance * additionalDivisionsAmount;
+  }
+
+  function generateDivisionsAndTexts(startPosition, endPosition) {
+    c.divisions.forEach(function (division) {
+      generateDivisions(startPosition, endPosition, division);
+    });
+    var i = 0; 
+    c.texts.forEach(function (textConfig) {
+      var textsArray = generateTexts(startPosition, endPosition, textConfig);
+      if (texts[i]){
+        texts[i] = texts[i].concat(textsArray);
+      } else {
+        texts.push(textsArray);
+      }
+      i++;
+    });
   }
 
   function generateDivisions(startPosition, endPosition, elementConfig) {

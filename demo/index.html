@@ -16,8 +16,11 @@
     <svg id="svgV" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
 <div class="content">
+    <button id="updateSize">update size</button>
     <div id="scroll" style="">
-        <div style="width: 90000000px; height: 90000000px;"></div>
+        <div style="width: 90000000px; height: 90000000px;">
+            
+        </div>
     </div>
     <script>
 
@@ -44,7 +47,12 @@
         scroll.addEventListener('scroll', function () {
             rulezH.scrollTo(scroll.scrollLeft);
             rulezV.scrollTo(scroll.scrollTop);
-        })
+        });
+        
+        document.getElementById('updateSize').addEventListener('click', function(){
+            rulezH.resize();
+            rulezV.resize();
+        });
     </script>
 </div>
 

@@ -1,10 +1,12 @@
 #Rulez.js
 
-Rulez.js is a javascript library for showing svg based customizable rulers. 
+Rulez.js is a javascript library for showing svg based customizable rulers. It generates divisions and texts once and
+ only for visible area.
 
 ##Instalation
 
-Download the [minified library](https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js) or use bower to install it.
+Download the [minified library](https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js) or 
+use bower to install it.
 ````sh
 bower install rulez.js
 ````
@@ -153,7 +155,8 @@ Other parameters that can be changed are
 ````  
 
 ####Default configs
-It's possible to use default configs that will used for all texts and divisions if they not specify parameters on their own. Any parameters that can be used for divisions or texts are also applicable for default configs.
+It's possible to use default configs that will used for all texts and divisions if they not specify parameters on their 
+own. Any parameters that can be used for divisions or texts are also applicable for default configs.
 ````js
 divisionDefaults: {
     strokeWidth: 1,
@@ -173,6 +176,13 @@ Every ruller can be scrolled to a specific position by using
 ruler.scrollTo(<left (top for vertical rulers) position in pixels>);
 /* example */
 ruler.scrollTo(100);
+````
+
+###Resizing
+If width(height for vertical) is increased you'll need to resize ruler by calling resize 
+method.
+````js
+ruler.resize();
 ````
 
 [MIT License](http://opensource.org/licenses/mit-license.php).
