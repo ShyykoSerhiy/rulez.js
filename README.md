@@ -185,4 +185,11 @@ method.
 ruler.resize();
 ````
 
+###Scaling
+For scaling of ruler method setScale can be used. Internally it multiples text's value by provided scaleValue.
+````js
+ruler.setScale(<left (top for vertical rulers) position in pixels>);
+/* example */
+ruler.setScale(100);
+````
 [MIT License](http://opensource.org/licenses/mit-license.php).

@@ -17,9 +17,12 @@
 </div>
 <div class="content">
     <button id="updateSize">update size</button>
+    zoom <input id="zoom" type="range" min="0" max="10" step="0.01" value="1"/><label id="zoomLabel">1</label>
+
     <div id="scroll" style="">
         <div style="width: 90000000px; height: 90000000px;">
-            
+            <img id="img"
+                 src="demo.png"/>
         </div>
     </div>
     <script>
@@ -48,10 +51,26 @@
             rulezH.scrollTo(scroll.scrollLeft);
             rulezV.scrollTo(scroll.scrollTop);
         });
-        
-        document.getElementById('updateSize').addEventListener('click', function(){
+
+        document.getElementById('updateSize').addEventListener('click', function () {
             rulezH.resize();
             rulezV.resize();
+        });
+        var img = document.getElementById('img');
+        var imgWidth = 0;
+        var imgHeight = 0;
+        var zoomLabel = document.getElementById('zoomLabel');
+        document.getElementById('zoom').addEventListener('change', function (event) {
+            if (!imgWidth) {
+                imgWidth = img.width;
+                imgHeight = img.height;
+            }
+            var scale = event.target.value;
+            img.style.width = imgWidth * scale + 'px';
+            img.style.height = imgHeight * scale + 'px';
+            rulezH.setScale(1 / scale);
+            rulezV.setScale(1 / scale);
+            zoomLabel.innerHTML = scale;
         });
     </script>
 </div>

@@ -80,6 +80,11 @@ var Rulez = function (config) {
    * @type {number}
    */
   var endPosition;
+  /**
+   * Scale of ruler
+   * @type {number}
+   */
+  var scale = 1;
 
   c.width = c.width ? c.width : c.element.clientWidth;
   c.height = c.height ? c.height : c.element.clientHeight;
@@ -114,9 +119,18 @@ var Rulez = function (config) {
       var startTextPos = currentPosition - offset;
       for (var j = 0; j < textElements.length; j++) {
         var textElement = textElements[j];
-        textElement.textContent = startTextPos + (j - additionalDivisionsAmount) * textConfig.pixelGap;
+        textElement.textContent = Math.floor((startTextPos + (j - additionalDivisionsAmount) * textConfig.pixelGap) * scale);
       }
     }
+  };
+
+  /**
+   * Scales the ruler's text values by specific value.
+   * @param scaleValue
+   */
+  this.setScale = function(scaleValue){
+    scale = scaleValue;
+    this.scrollTo(currentPosition);
   };
 
   /**
