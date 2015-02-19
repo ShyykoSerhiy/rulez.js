@@ -86,8 +86,8 @@ var Rulez = function (config) {
    */
   var scale = 1;
 
-  c.width = c.width ? c.width : c.element.clientWidth;
-  c.height = c.height ? c.height : c.element.clientHeight;
+  c.width = c.width ? c.width : c.element.getBoundingClientRect().width;
+  c.height = c.height ? c.height : c.element.getBoundingClientRect().height;
   c.element.appendChild(g);
   var size = isVertical() ? c.height : c.width;
   var maxDistance = 0;
@@ -128,14 +128,14 @@ var Rulez = function (config) {
    * Scales the ruler's text values by specific value.
    * @param scaleValue
    */
-  this.setScale = function(scaleValue){
+  this.setScale = function (scaleValue) {
     scale = scaleValue;
     this.scrollTo(currentPosition);
   };
 
   /**
-   * Updates size with current clientWidth(height) in case it's bigger than previous one. 
-   * Only appends more divisions and texts if necessary. 
+   * Updates size with current clientWidth(height) in case it's bigger than previous one.
+   * Only appends more divisions and texts if necessary.
    */
   this.resize = function () {
     var oldSize = size;
@@ -153,8 +153,62 @@ var Rulez = function (config) {
     }
   };
 
+  this.saveAsImage = function (saveFinishCallback) {
+    var svgClone = deepCloneWithCopyingStyle(c.element);
+    //http://stackoverflow.com/questions/23514921/problems-calling-drawimage-with-svg-on-a-canvas-context-object-in-firefox
+    svgClone.setAttribute('width', c.width);
+    svgClone.setAttribute('height', c.height);
+    //
+    var canvas = document.createElement('canvas');
+    canvas.setAttribute('width', c.width);
+    canvas.setAttribute('height', c.height);
+    var ctx = canvas.getContext('2d');
+
+    var URL = window.URL || window.webkitURL;
+
+    var img = new Image();
+    img.style.position = 'absolute';
+    img.style.top = '-100000px';
+    img.style.left = '-100000px';
+    img.setAttribute('width', c.width);
+    img.setAttribute('height', c.height);
+
+    var svg = new Blob([svgClone.outerHTML], {type: 'image/svg+xml;charset=utf-8'});
+    var url = URL.createObjectURL(svg);
+
+    img.onload = function () {
+      setTimeout(function () { //workaround for not working width and height.
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        saveFinishCallback(canvas.toDataURL());
+      }, 1000);
+    };
+
+    document.body.appendChild(img);
+    img.src = url;
+  };
+
+  function deepCloneWithCopyingStyle(node) {
+    var clone = node.cloneNode(false);
+    var i;
+    if (node instanceof Element){
+      var computedStyle = window.getComputedStyle(node);
+      if (computedStyle) {
+        for (i = 0; i < computedStyle.length; i++) {
+          var property = computedStyle[i];
+          clone.style.setProperty(property, computedStyle.getPropertyValue(property), '');
+        }
+      }
+    }
+    for (i = 0; i < node.childNodes.length; i++) {
+      clone.appendChild(deepCloneWithCopyingStyle(node.childNodes[i]));
+    }
+    
+    return clone;
+  }
+
   function calculateStartEndPosition() {
-    if (!maxDistance){
+    if (!maxDistance) {
       c.divisions.forEach(function (entry) {
         if (entry.pixelGap > maxDistance) {
           maxDistance = entry.pixelGap;
@@ -169,10 +223,10 @@ var Rulez = function (config) {
     c.divisions.forEach(function (division) {
       generateDivisions(startPosition, endPosition, division);
     });
-    var i = 0; 
+    var i = 0;
     c.texts.forEach(function (textConfig) {
       var textsArray = generateTexts(startPosition, endPosition, textConfig);
-      if (texts[i]){
+      if (texts[i]) {
         texts[i] = texts[i].concat(textsArray);
       } else {
         texts.push(textsArray);

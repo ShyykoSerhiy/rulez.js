@@ -192,4 +192,14 @@ ruler.setScale(<left (top for vertical rulers) position in pixels>);
 /* example */
 ruler.setScale(100);
 ````
+
+###Saving as image
+Ruler can be saved as image(png base64)
+````js
+rulezH.saveAsImage(function(resultImg){
+    var img = new Image();
+    img.src = resultImg;
+    document.body.appendChild(img);
+});
+````
 [MIT License](http://opensource.org/licenses/mit-license.php).
