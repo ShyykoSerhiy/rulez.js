@@ -1,10 +1,12 @@
 #Rulez.js
 
-Rulez.js is a javascript library for showing svg based customizable rulers. 
+Rulez.js is a javascript library for showing svg based customizable rulers. It generates divisions and texts once and
+ only for visible area.
 
 ##Instalation
 
-Download the [minified library](https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js) or use bower to install it.
+Download the [minified library](https://raw.githubusercontent.com/ShyykoSerhiy/rulez.js/master/dist/js/rulez.min.js) or 
+use bower to install it.
 ````sh
 bower install rulez.js
 ````
@@ -153,7 +155,8 @@ Other parameters that can be changed are
 ````  
 
 ####Default configs
-It's possible to use default configs that will used for all texts and divisions if they not specify parameters on their own. Any parameters that can be used for divisions or texts are also applicable for default configs.
+It's possible to use default configs that will used for all texts and divisions if they not specify parameters on their 
+own. Any parameters that can be used for divisions or texts are also applicable for default configs.
 ````js
 divisionDefaults: {
     strokeWidth: 1,
@@ -175,4 +178,28 @@ ruler.scrollTo(<left (top for vertical rulers) position in pixels>);
 ruler.scrollTo(100);
 ````
 
+###Resizing
+If width(height for vertical) is increased you'll need to resize ruler by calling resize 
+method.
+````js
+ruler.resize();
+````
+
+###Scaling
+For scaling of ruler method setScale can be used. Internally it multiples text's value by provided scaleValue.
+````js
+ruler.setScale(<left (top for vertical rulers) position in pixels>);
+/* example */
+ruler.setScale(100);
+````
+
+###Saving as image
+Ruler can be saved as image(png base64)
+````js
+rulezH.saveAsImage(function(resultImg){
+    var img = new Image();
+    img.src = resultImg;
+    document.body.appendChild(img);
+});
+````
 [MIT License](http://opensource.org/licenses/mit-license.php).

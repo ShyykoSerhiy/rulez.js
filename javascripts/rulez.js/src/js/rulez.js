@@ -47,41 +47,57 @@ var Rulez = function (config) {
       }
     ]
   };
+  /**
+   * result config
+   */
   var c = mergeConfigs(JSON.parse(JSON.stringify(defaultConfig)), config);
-
+  /**
+   * amount of additional(redundant) divisions on left and right (top, bottom) side of ruler
+   */
+  var additionalDivisionsAmount = 2;
+  /**
+   * main group (g svg element) that contains all divisions and texts
+   * @type {SVGGElement}
+   */
   var g = createGroup();
-  c.width = c.width ? c.width : c.element.clientWidth;
-  c.height = c.height ? c.height : c.element.clientHeight;
-  c.element.appendChild(g);
-  var maxDistance = 0;
-
-  var currentPosition = 0;
-
+  /**
+   * Array of arrays of all texts
+   * @type {Array.<Array.<SVGTextElement >>}
+   */
   var texts = [];
+  /**
+   * Current position of ruler
+   * @type {number}
+   */
+  var currentPosition = 0;
+  /**
+   * Start position of drawing ruler
+   * @type {number}
+   */
+  var startPosition;
+  /**
+   * End position of drawing ruler
+   * @type {number}
+   */
+  var endPosition;
+  /**
+   * Scale of ruler
+   * @type {number}
+   */
+  var scale = 1;
+
+  c.width = c.width ? c.width : c.element.getBoundingClientRect().width;
+  c.height = c.height ? c.height : c.element.getBoundingClientRect().height;
+  c.element.appendChild(g);
+  var size = isVertical() ? c.height : c.width;
+  var maxDistance = 0;
 
   /**
    * Renders ruler inside svg element
    */
   this.render = function () {
-    c.divisions.forEach(function (entry) {
-      if (entry.pixelGap > maxDistance) {
-        maxDistance = entry.pixelGap;
-      }
-    });
-    var additionalDivisionsAmount = 1;
-    var size = isVertical() ? c.height : c.width;
-    var endPosition = currentPosition + size + maxDistance * additionalDivisionsAmount;
-    var startPosition = currentPosition - currentPosition % maxDistance - maxDistance * additionalDivisionsAmount;
-
-    c.divisions.forEach(function (division) {
-      generateDivisions(startPosition, endPosition, division);
-    });
-    c.texts.forEach(function (textConfig) {
-      var additionalTextsAmount = getAdditionalTextsAmount(textConfig);
-      var endPosition = currentPosition + size + textConfig.pixelGap * additionalTextsAmount;
-      var startPosition = currentPosition - currentPosition % (textConfig.pixelGap) - textConfig.pixelGap * additionalTextsAmount;
-      texts.push(generateTexts(startPosition, endPosition, textConfig));
-    });
+    calculateStartEndPosition();
+    generateDivisionsAndTexts(startPosition, endPosition);
   };
 
   /**
@@ -101,16 +117,122 @@ var Rulez = function (config) {
       var textElements = texts[i];
       var offset = currentPosition % maxDistance;
       var startTextPos = currentPosition - offset;
-      var additionalTextsAmount = getAdditionalTextsAmount(textConfig);
       for (var j = 0; j < textElements.length; j++) {
         var textElement = textElements[j];
-        textElement.textContent = startTextPos + (j - additionalTextsAmount) * textConfig.pixelGap;
+        textElement.textContent = Math.floor((startTextPos + (j - additionalDivisionsAmount) * textConfig.pixelGap) * scale);
       }
     }
   };
 
-  function getAdditionalTextsAmount(config) {
-    return Math.floor(maxDistance / config.pixelGap) + 1;
+  /**
+   * Scales the ruler's text values by specific value.
+   * @param scaleValue
+   */
+  this.setScale = function (scaleValue) {
+    scale = scaleValue;
+    this.scrollTo(currentPosition);
+  };
+
+  /**
+   * Updates size with current clientWidth(height) in case it's bigger than previous one.
+   * Only appends more divisions and texts if necessary.
+   */
+  this.resize = function () {
+    var oldSize = size;
+    var newSize = isVertical() ? c.element.clientHeight : c.element.clientWidth;
+    if (oldSize !== newSize) {
+      if (oldSize > newSize) {
+        //todo remove redundant?
+      } else {
+        size = newSize;
+        var oldEndPosition = endPosition;
+        calculateStartEndPosition();
+        generateDivisionsAndTexts(oldEndPosition, endPosition);
+        this.scrollTo(currentPosition);
+      }
+    }
+  };
+
+  this.saveAsImage = function (saveFinishCallback) {
+    var svgClone = deepCloneWithCopyingStyle(c.element);
+    //http://stackoverflow.com/questions/23514921/problems-calling-drawimage-with-svg-on-a-canvas-context-object-in-firefox
+    svgClone.setAttribute('width', c.width);
+    svgClone.setAttribute('height', c.height);
+    //
+    var canvas = document.createElement('canvas');
+    canvas.setAttribute('width', c.width);
+    canvas.setAttribute('height', c.height);
+    var ctx = canvas.getContext('2d');
+
+    var URL = window.URL || window.webkitURL;
+
+    var img = new Image();
+    img.style.position = 'absolute';
+    img.style.top = '-100000px';
+    img.style.left = '-100000px';
+    img.setAttribute('width', c.width);
+    img.setAttribute('height', c.height);
+
+    var svg = new Blob([svgClone.outerHTML], {type: 'image/svg+xml;charset=utf-8'});
+    var url = URL.createObjectURL(svg);
+
+    img.onload = function () {
+      setTimeout(function () { //workaround for not working width and height.
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        saveFinishCallback(canvas.toDataURL());
+      }, 1000);
+    };
+
+    document.body.appendChild(img);
+    img.src = url;
+  };
+
+  function deepCloneWithCopyingStyle(node) {
+    var clone = node.cloneNode(false);
+    var i;
+    if (node instanceof Element){
+      var computedStyle = window.getComputedStyle(node);
+      if (computedStyle) {
+        for (i = 0; i < computedStyle.length; i++) {
+          var property = computedStyle[i];
+          clone.style.setProperty(property, computedStyle.getPropertyValue(property), '');
+        }
+      }
+    }
+    for (i = 0; i < node.childNodes.length; i++) {
+      clone.appendChild(deepCloneWithCopyingStyle(node.childNodes[i]));
+    }
+    
+    return clone;
+  }
+
+  function calculateStartEndPosition() {
+    if (!maxDistance) {
+      c.divisions.forEach(function (entry) {
+        if (entry.pixelGap > maxDistance) {
+          maxDistance = entry.pixelGap;
+        }
+      });
+    }
+    endPosition = size - (size % maxDistance) + maxDistance * additionalDivisionsAmount;
+    startPosition = -maxDistance * additionalDivisionsAmount;
+  }
+
+  function generateDivisionsAndTexts(startPosition, endPosition) {
+    c.divisions.forEach(function (division) {
+      generateDivisions(startPosition, endPosition, division);
+    });
+    var i = 0;
+    c.texts.forEach(function (textConfig) {
+      var textsArray = generateTexts(startPosition, endPosition, textConfig);
+      if (texts[i]) {
+        texts[i] = texts[i].concat(textsArray);
+      } else {
+        texts.push(textsArray);
+      }
+      i++;
+    });
   }
 
   function generateDivisions(startPosition, endPosition, elementConfig) {

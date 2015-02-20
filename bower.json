@@ -1,0 +1,11 @@
+{
+  "name": "rulez.js",
+  "authors": [
+    "Shyyko Serhiy <shyyko.serhiy@gmail.com>"
+  ],
+  "description": "Javascript library for showing svg customizable rulers(github pages)",
+  "license": "MIT",
+  "dependencies":{
+    "rulez.js": "0.0.4"
+  }
+}
