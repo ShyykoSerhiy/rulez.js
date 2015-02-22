@@ -54,11 +54,19 @@ module.exports = function (grunt) {
         gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
         globalReplace: false
       }
+    },
+    jsdoc : {
+      dist : {
+        src: ['src/js/*.js'],
+        options: {
+          destination: 'doc'
+        }
+      }
     }
   });
 
   matchdep.filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint','uglify', 'cssmin']);
+  grunt.registerTask('default', ['jshint','uglify', 'cssmin', 'jsdoc']);
 };
