@@ -13,15 +13,22 @@ var Rulez = function (config) {
     height: null,
     element: null,
     layout: 'horizontal',
+    units: 'pt', //'em', 'ex', 'px', 'pt', 'pc', 'cm', 'mm', 'in' and ''(user units) :  http://www.w3.org/TR/SVG/coords.html#Units
     divisionDefaults: {
       strokeWidth: 1,
       type: 'rect',
-      className: 'rulez-rect'
+      className: 'rulez-rect',
+      renderer: null
     },
     textDefaults: {
       rotation: 0,
       offset: 25,
-      className: 'rulez-text'
+      className: 'rulez-text',
+      /**
+       * Wherever to show or not to show units alongside text
+       */
+      showUnits: false,
+      renderer: null
     },
     divisions: [
       {
@@ -91,6 +98,7 @@ var Rulez = function (config) {
   c.element.appendChild(g);
   var size = isVertical() ? c.height : c.width;
   var maxDistance = 0;
+  var unitConversionRate = getUnitConversionRate();
 
   /**
    * Renders ruler inside svg element
@@ -102,31 +110,41 @@ var Rulez = function (config) {
 
   /**
    * Scrolls ruler to specified position.
-   * @param pos left(or top for vertical rulers) position to scroll to.
+   * @param {number} pos left(or top for vertical rulers) position to scroll to.
+   * @param {boolean} useUnits if true pos will be multiplied by unit conversion rate;
    */
-  this.scrollTo = function (pos) {
+  this.scrollTo = function (pos, useUnits) {
     currentPosition = pos;
+    if (useUnits){
+      currentPosition *= unitConversionRate;
+    }
 
     if (isVertical()) {
-      g.setAttribute('transform', 'matrix(1,0,0,1,0,' + (-currentPosition % maxDistance) + ')');
+      g.setAttribute('transform', 'translate(0,' + (-currentPosition % (maxDistance * unitConversionRate)) + ')');
     } else {
-      g.setAttribute('transform', 'matrix(1,0,0,1,' + (-currentPosition % maxDistance) + ',0)');
+      g.setAttribute('transform', 'translate(' + (-currentPosition % (maxDistance * unitConversionRate)) + ',0)');
     }
+    var pixelCurrentPosition = currentPosition / unitConversionRate;
     for (var i = 0; i < c.texts.length; i++) {
       var textConfig = c.texts[i];
       var textElements = texts[i];
-      var offset = currentPosition % maxDistance;
-      var startTextPos = currentPosition - offset;
+      var amountPerMaxDistance = maxDistance / textConfig.pixelGap;
+      var offset = pixelCurrentPosition % maxDistance;
+      var startTextPos = pixelCurrentPosition - offset;
       for (var j = 0; j < textElements.length; j++) {
         var textElement = textElements[j];
-        textElement.textContent = Math.floor((startTextPos + (j - additionalDivisionsAmount) * textConfig.pixelGap) * scale);
+        var text = Math.floor((startTextPos + (j - additionalDivisionsAmount * amountPerMaxDistance) * textConfig.pixelGap) * scale);
+        if (textConfig.showUnits){
+          text = addUnits(text);
+        }
+        textElement.textContent = text;
       }
     }
   };
 
   /**
    * Scales the ruler's text values by specific value.
-   * @param scaleValue
+   * @param {number} scaleValue 
    */
   this.setScale = function (scaleValue) {
     scale = scaleValue;
@@ -142,7 +160,7 @@ var Rulez = function (config) {
     var newSize = isVertical() ? c.element.clientHeight : c.element.clientWidth;
     if (oldSize !== newSize) {
       if (oldSize > newSize) {
-        //todo remove redundant?
+        //todo remove redundant divisions?
       } else {
         size = newSize;
         var oldEndPosition = endPosition;
@@ -153,6 +171,15 @@ var Rulez = function (config) {
     }
   };
 
+  /**
+   * Callback that is called after saving of ruler as image is done
+   * @callback saveFinishCallback
+   * @param {string} base64 png image string
+   */
+  /**
+   * Saves ruler as image. 
+   * @param {saveFinishCallback} saveFinishCallback
+   */
   this.saveAsImage = function (saveFinishCallback) {
     var svgClone = deepCloneWithCopyingStyle(c.element);
     //http://stackoverflow.com/questions/23514921/problems-calling-drawimage-with-svg-on-a-canvas-context-object-in-firefox
@@ -170,6 +197,7 @@ var Rulez = function (config) {
     img.style.position = 'absolute';
     img.style.top = '-100000px';
     img.style.left = '-100000px';
+    img.style.zIndex = -100000;
     img.setAttribute('width', c.width);
     img.setAttribute('height', c.height);
 
@@ -188,10 +216,17 @@ var Rulez = function (config) {
     img.src = url;
   };
 
+  /**
+   * @returns {number} how much pixels are in used unit.
+   */
+  this.getUnitConversionRate = function () {
+    return getUnitConversionRate();
+  };
+
   function deepCloneWithCopyingStyle(node) {
     var clone = node.cloneNode(false);
     var i;
-    if (node instanceof Element){
+    if (node instanceof Element) {
       var computedStyle = window.getComputedStyle(node);
       if (computedStyle) {
         for (i = 0; i < computedStyle.length; i++) {
@@ -203,7 +238,7 @@ var Rulez = function (config) {
     for (i = 0; i < node.childNodes.length; i++) {
       clone.appendChild(deepCloneWithCopyingStyle(node.childNodes[i]));
     }
-    
+
     return clone;
   }
 
@@ -238,10 +273,10 @@ var Rulez = function (config) {
   function generateDivisions(startPosition, endPosition, elementConfig) {
     for (var i = startPosition; i < endPosition; i += elementConfig.pixelGap) {
       var line = createLine(i, elementConfig);
+      g.appendChild(line);
       if (elementConfig.renderer) {
         elementConfig.renderer(line);
       }
-      g.appendChild(line);
     }
   }
 
@@ -285,11 +320,11 @@ var Rulez = function (config) {
     }
 
     line.setAttribute('class', elementConfig.className);
-    line.setAttribute(x1, pos);
-    line.setAttribute(x2, pos);
-    line.setAttribute(y1, '0');
-    line.setAttribute(y2, elementConfig.lineLength);
-    line.setAttribute('stroke-width', elementConfig.strokeWidth);
+    line.setAttribute(x1, addUnits(pos));
+    line.setAttribute(x2, addUnits(pos));
+    line.setAttribute(y1, addUnits('0'));
+    line.setAttribute(y2, addUnits(elementConfig.lineLength));
+    line.setAttribute('stroke-width', addUnits(elementConfig.strokeWidth));
     return line;
   }
 
@@ -308,10 +343,10 @@ var Rulez = function (config) {
       width = 'width';
     }
     line.setAttribute('class', elementConfig.className);
-    line.setAttribute(x, pos);
-    line.setAttribute(y, '0');
-    line.setAttribute(height, elementConfig.lineLength);
-    line.setAttribute(width, elementConfig.strokeWidth);
+    line.setAttribute(x, addUnits(pos));
+    line.setAttribute(y, addUnits('0'));
+    line.setAttribute(height, addUnits(elementConfig.lineLength));
+    line.setAttribute(width, addUnits(elementConfig.strokeWidth));
     return line;
   }
 
@@ -322,16 +357,16 @@ var Rulez = function (config) {
     if (isVertical()) {
       x = 'y';
       y = 'x';
-      rotate = 'rotate(' + elementConfig.rotation + ' ' + elementConfig.offset + ' ' + pos + ')';
+      rotate = 'rotate(' + elementConfig.rotation + ' ' + (elementConfig.offset * unitConversionRate) + ' ' + (pos * unitConversionRate) + ')';
     } else {
       x = 'x';
       y = 'y';
-      rotate = 'rotate(' + elementConfig.rotation + ' ' + pos + ' ' + elementConfig.offset + ')';
+      rotate = 'rotate(' + elementConfig.rotation + ' ' + (pos * unitConversionRate) + ' ' + (elementConfig.offset * unitConversionRate) + ')';
     }
-    textSvg.setAttribute(x, pos);
-    textSvg.setAttribute(y, elementConfig.offset);
+    textSvg.setAttribute(x, addUnits(pos));
+    textSvg.setAttribute(y, addUnits(elementConfig.offset));
     textSvg.setAttribute('transform', rotate);
-    textSvg.textContent = pos;
+    textSvg.textContent = elementConfig.showUnits ? addUnits(pos) : pos;
     return textSvg;
   }
 
@@ -377,5 +412,25 @@ var Rulez = function (config) {
     }
 
     return def;
+  }
+
+  function addUnits(value) {
+    return value + c.units;
+  }
+
+  function getUnitConversionRate() {
+    if (c.units === '' || c.units === 'px') {
+      return 1;
+    }
+    var dummyEl = document.createElement('div');
+    dummyEl.style.position = 'absolute';
+    dummyEl.style.top = '-100000px';
+    dummyEl.style.left = '-100000px';
+    dummyEl.style.zIndex = -100000;
+    dummyEl.style.width = dummyEl.style.height = addUnits(1);
+    document.body.appendChild(dummyEl);
+    var width = (window.getComputedStyle(dummyEl).width).replace('px', '');
+    document.body.removeChild(dummyEl);
+    return width;
   }
 };

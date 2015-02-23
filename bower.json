@@ -6,6 +6,6 @@
   "description": "Javascript library for showing svg customizable rulers(github pages)",
   "license": "MIT",
   "dependencies":{
-    "rulez.js": "0.0.4"
+    "rulez.js": "0.0.5"
   }
 }

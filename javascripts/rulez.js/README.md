@@ -98,6 +98,26 @@ var rulez = new Rulez({
 ```` 
 max pixelGap of divisions is 100 and it's NOT dividable by 6.
 
+####Specifying units
+By default rulez.js uses 'user' units(px). This can be changed by specifying units param in config.
+  Possible values for units: 'em', 'ex', 'px', 'pt', 'pc', 'cm', 'mm', 'in' and ''(user units)
+  [svg units spec](http://www.w3.org/TR/SVG/coords.html#Units). Note that those units will be used for all
+  params for divisions and texts(pixelGap, lineLength, strokeWidth, etc).
+      
+````js
+var rulez = new Rulez({
+    units: 'pt'
+});
+````
+
+Units conversion rate (how many pixels is in one specified unit) can be retrieved using method getUnitConversionRate
+````js
+var rulez = new Rulez({
+    units: 'pt'
+});
+var unitsConversionRate = rulez.getUnitConversionRate();
+````
+
 ####Customizing divisions
 Divisions can be changed by providing array of divisions config objects
 ````js
@@ -123,7 +143,10 @@ Other parameters that can be changed are
 ````js
     strokeWidth : 1,// width of division
     className: 'someClassName',// css class applied to every division
-    type: 'rect'// 'rect' or 'line': type of svg element used to render division
+    type: 'rect',// 'rect' or 'line': type of svg element used to render division
+    renderer: function(division){// function that is called when division is added to ruler
+      division.doSomething();
+    }
 ````
   
 ####Customizing texts
@@ -149,9 +172,13 @@ The code above means that ruler will be created with two different texts types:
 
 Other parameters that can be changed are 
 ````js
-    className: 'someClassName'// css class applied to every text
-    offset: 20,//offsets of texts in pixels
-    rotation:90//rotation in degrees of texts
+className: 'someClassName'// css class applied to every text
+offset: 20,//offsets of texts in pixels
+rotation:90,//rotation in degrees of texts
+showUnits:true,//Wherever to show or not to show units alongside text
+renderer: function(text){// function that is called when text is added to ruler
+  text.doSomething();
+}
 ````  
 
 ####Default configs
@@ -173,7 +200,7 @@ textDefaults: {
 ###Scrolling rullers to a specific position
 Every ruller can be scrolled to a specific position by using
 ````js
-ruler.scrollTo(<left (top for vertical rulers) position in pixels>);
+ruler.scrollTo(<left (top for vertical rulers) position in pixels>, {boolean} useUnits);
 /* example */
 ruler.scrollTo(100);
 ````
