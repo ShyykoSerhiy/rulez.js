@@ -39,6 +39,10 @@ ol, ul {
   list-style: none;
 }
 
+.js_doc{
+    float: right;
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
