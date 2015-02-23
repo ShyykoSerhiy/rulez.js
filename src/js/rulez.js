@@ -13,7 +13,7 @@ var Rulez = function (config) {
     height: null,
     element: null,
     layout: 'horizontal',
-    units: 'pt', //'em', 'ex', 'px', 'pt', 'pc', 'cm', 'mm', 'in' and ''(user units) :  http://www.w3.org/TR/SVG/coords.html#Units
+    units: '', //'em', 'ex', 'px', 'pt', 'pc', 'cm', 'mm', 'in' and ''(user units) :  http://www.w3.org/TR/SVG/coords.html#Units
     divisionDefaults: {
       strokeWidth: 1,
       type: 'rect',
