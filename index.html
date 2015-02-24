@@ -79,7 +79,7 @@
 
         <p>Horizontal ruler </p>
 
-        <iframe src="//jsfiddle.net/shyykoserhiy/1mfecoL6/embedded/" 
+        <iframe src="//jsfiddle.net/shyykoserhiy/1mfecoL6/embedded/"
                 allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
         <p>Vertical ruler</p>
@@ -156,12 +156,41 @@
         <p>max pixelGap of divisions is 100 and it's NOT dividable by 6.</p>
 
         <h4>
+            <a id="specifying-units" class="anchor" href="#specifying-units" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Specifying units</h4>
+
+        <p>By default rulez.js uses 'user' units(px). This can be changed by specifying units param in config.
+            Possible values for units: 'em', 'ex', 'px', 'pt', 'pc', 'cm', 'mm', 'in' and ''(user units)
+            <a href="http://www.w3.org/TR/SVG/coords.html#Units">svg units spec</a>. Note that those units will be used
+            for all
+            params for divisions and texts(pixelGap, lineLength, strokeWidth, etc).</p>
+
+        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span
+                class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+    units<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>pt<span
+                    class="pl-pds">'</span></span>
+});</pre>
+        </div>
+
+        <p>Units conversion rate (how many pixels is in one specified unit) can be retrieved using method
+            getUnitConversionRate</p>
+
+        <div class="highlight highlight-js"><pre><span class="pl-s">var</span> rulez <span class="pl-k">=</span> <span
+                class="pl-k">new</span> <span class="pl-en">Rulez</span>({
+    units<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>pt<span
+                    class="pl-pds">'</span></span>
+});
+<span class="pl-s">var</span> unitsConversionRate <span class="pl-k">=</span> rulez.getUnitConversionRate();</pre>
+        </div>
+
+        <h4>
             <a id="customizing-divisions" class="anchor" href="#customizing-divisions" aria-hidden="true"><span
                     class="octicon octicon-link"></span></a>Customizing divisions</h4>
 
         <p>Divisions can be changed by providing array of divisions config objects</p>
 
-        <iframe src="//jsfiddle.net/shyykoserhiy/0gejxn9e/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+        <iframe src="//jsfiddle.net/shyykoserhiy/0gejxn9e/embedded/" allowfullscreen="allowfullscreen"
+                frameborder="0"></iframe>
 
         <p>The code above means that ruler will be created with two different division types:</p>
 
@@ -174,11 +203,11 @@
 
         <div class="highlight highlight-js">
             <pre>    strokeWidth <span class="pl-k">:</span> <span
-                class="pl-c1">1</span>,<span class="pl-c">// width of division</span>
+                    class="pl-c1">1</span>,<span class="pl-c">// width of division</span>
     className<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>someClassName<span
-                    class="pl-pds">'</span></span>,<span class="pl-c">// css class applied to every division</span>
+                        class="pl-pds">'</span></span>,<span class="pl-c">// css class applied to every division</span>
     type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rect<span
-                    class="pl-pds">'</span></span><span class="pl-c">// 'rect' or 'line': type of svg element used to render division</span></pre>
+                        class="pl-pds">'</span></span><span class="pl-c">// 'rect' or 'line': type of svg element used to render division</span></pre>
         </div>
 
         <h4>
@@ -187,7 +216,8 @@
 
         <p>Texts can be changed by providing array of texts config objects</p>
 
-        <iframe src="//jsfiddle.net/shyykoserhiy/nfnt3ogm/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+        <iframe src="//jsfiddle.net/shyykoserhiy/nfnt3ogm/embedded/" allowfullscreen="allowfullscreen"
+                frameborder="0"></iframe>
 
         <p>The code above means that ruler will be created with two different texts types:</p>
 
@@ -214,7 +244,8 @@
             parameters on their own. Any parameters that can be used for divisions or texts are also applicable for
             default configs.</p>
 
-        <iframe src="//jsfiddle.net/shyykoserhiy/z94n3z0s/1/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+        <iframe src="//jsfiddle.net/shyykoserhiy/z94n3z0s/1/embedded/" allowfullscreen="allowfullscreen"
+                frameborder="0"></iframe>
 
         <h3>
             <a id="scrolling-rullers-to-a-specific-position" class="anchor"
@@ -223,7 +254,46 @@
 
         <p>Every ruller can be scrolled to a specific position by using scrollTo(position)</p>
 
-        <iframe width="100%" height="300" src="//jsfiddle.net/shyykoserhiy/897mb7bf/1/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+        <iframe width="100%" height="300" src="//jsfiddle.net/shyykoserhiy/897mb7bf/1/embedded/"
+                allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+        <h3>
+            <a id="resizing" class="anchor" href="#resizing" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Resizing</h3>
+
+        <p>If width(height for vertical) is increased you'll need to resize ruler by calling resize
+            method.</p>
+
+        <div class="highlight highlight-js">
+            <pre>ruler.resize();</pre>
+        </div>
+
+        <h3>
+            <a id="scaling" class="anchor" href="#scaling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scaling
+        </h3>
+
+        <p>For scaling of ruler method setScale can be used. Internally it multiples text's value by provided
+            scaleValue.</p>
+
+        <div class="highlight highlight-js"><pre>ruler.setScale(<span class="pl-k">&lt;</span>left (top <span
+                class="pl-k">for</span> vertical rulers) position <span class="pl-k">in</span> pixels<span class="pl-k">&gt;</span>);
+<span class="pl-c">/* example */</span>
+ruler.setScale(<span class="pl-c1">100</span>);</pre>
+        </div>
+
+        <h3>
+            <a id="saving-as-image" class="anchor" href="#saving-as-image" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Saving as image</h3>
+
+        <p>Ruler can be saved as image(png base64)</p>
+
+        <div class="highlight highlight-js"><pre>rulezH.saveAsImage(<span class="pl-st">function</span>(<span
+                class="pl-vpf">resultImg</span>){
+    <span class="pl-s">var</span> img <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Image</span>();
+    img.<span class="pl-sc">src</span> <span class="pl-k">=</span> resultImg;
+    <span class="pl-s3">document</span>.<span class="pl-sc">body</span>.<span class="pl-s3">appendChild</span>(img);
+});</pre>
+        </div>
 
         <p><a href="http://opensource.org/licenses/mit-license.php">MIT License</a>.</p>
     </section>
