@@ -20,7 +20,7 @@
     zoom <input id="zoom" type="range" min="0" max="10" step="0.01" value="1"/><label id="zoomLabel">1</label>
 
     <div id="scroll" style="">
-        <div style="width: 90000000px; height: 90000000px;">
+        <div style="width: 9000px; height: 9000px;">
             <img id="img"
                  src="demo.png"/>
         </div>
@@ -53,6 +53,9 @@
         });
 
         document.getElementById('updateSize').addEventListener('click', function () {
+            rulezH.saveAsImage(function(imgs){
+                img.src = imgs;
+            });
             rulezH.resize();
             rulezV.resize();
         });
