@@ -208,6 +208,7 @@ var Rulez = function (config) {
       setTimeout(function () { //workaround for not working width and height.
         ctx.drawImage(img, 0, 0);
         URL.revokeObjectURL(url);
+        document.body.removeChild(img);
         saveFinishCallback(canvas.toDataURL());
       }, 1000);
     };
