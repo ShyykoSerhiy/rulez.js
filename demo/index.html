@@ -29,12 +29,14 @@
 
         var rulezH = new Rulez({
             element: document.getElementById('svgH'),
-            layout: 'horizontal'
+            layout: 'horizontal',
+            alignment: 'bottom'
         });
         rulezH.render();
         var rulezV = new Rulez({
             element: document.getElementById('svgV'),
             layout: 'vertical',
+            alignment: 'right',
             textDefaults: {
                 rotation: 90
             },

@@ -13,6 +13,7 @@ var Rulez = function (config) {
     height: null,
     element: null,
     layout: 'horizontal',
+    alignment: 'top',  
     units: '', //'em', 'ex', 'px', 'pt', 'pc', 'cm', 'mm', 'in' and ''(user units) :  http://www.w3.org/TR/SVG/coords.html#Units
     divisionDefaults: {
       strokeWidth: 1,
@@ -307,6 +308,7 @@ var Rulez = function (config) {
 
   function _createLine(pos, elementConfig) {
     var line = document.createElementNS(svgNS, 'line');
+    var defaultAlignment = isDefaultAlignment();  
     var x1, x2, y1, y2;
     if (isVertical()) {
       x1 = 'y1';
@@ -323,14 +325,15 @@ var Rulez = function (config) {
     line.setAttribute('class', elementConfig.className);
     line.setAttribute(x1, addUnits(pos));
     line.setAttribute(x2, addUnits(pos));
-    line.setAttribute(y1, addUnits('0'));
-    line.setAttribute(y2, addUnits(elementConfig.lineLength));
+    line.setAttribute(y1, addUnits(defaultAlignment ? '0' : getAlignmentOffset() - elementConfig.lineLength));
+    line.setAttribute(y2, addUnits(defaultAlignment ? elementConfig.lineLength : getAlignmentOffset()));
     line.setAttribute('stroke-width', addUnits(elementConfig.strokeWidth));
     return line;
   }
 
   function _createRect(pos, elementConfig) {
     var line = document.createElementNS(svgNS, 'rect');
+    var defaultAlignment = isDefaultAlignment();
     var x, y, height, width;
     if (isVertical()) {
       x = 'y';
@@ -345,7 +348,7 @@ var Rulez = function (config) {
     }
     line.setAttribute('class', elementConfig.className);
     line.setAttribute(x, addUnits(pos));
-    line.setAttribute(y, addUnits('0'));
+    line.setAttribute(y, addUnits(defaultAlignment ? '0' : getAlignmentOffset() - elementConfig.lineLength));
     line.setAttribute(height, addUnits(elementConfig.lineLength));
     line.setAttribute(width, addUnits(elementConfig.strokeWidth));
     return line;
@@ -353,19 +356,21 @@ var Rulez = function (config) {
 
   function createText(pos, elementConfig) {
     var textSvg = document.createElementNS(svgNS, 'text');
+    var defaultAlignment = isDefaultAlignment();
+    var yPos = defaultAlignment ? elementConfig.offset :  getAlignmentOffset() - elementConfig.offset;
     var x, y, rotate;
     textSvg.setAttribute('class', elementConfig.className);
     if (isVertical()) {
       x = 'y';
       y = 'x';
-      rotate = 'rotate(' + elementConfig.rotation + ' ' + (elementConfig.offset * unitConversionRate) + ' ' + (pos * unitConversionRate) + ')';
+      rotate = 'rotate(' + elementConfig.rotation + ' ' + (yPos * unitConversionRate) + ' ' + (pos * unitConversionRate) + ')';
     } else {
       x = 'x';
       y = 'y';
-      rotate = 'rotate(' + elementConfig.rotation + ' ' + (pos * unitConversionRate) + ' ' + (elementConfig.offset * unitConversionRate) + ')';
+      rotate = 'rotate(' + elementConfig.rotation + ' ' + (pos * unitConversionRate) + ' ' + (yPos * unitConversionRate) + ')';
     }
     textSvg.setAttribute(x, addUnits(pos));
-    textSvg.setAttribute(y, addUnits(elementConfig.offset));
+    textSvg.setAttribute(y, addUnits(yPos));
     textSvg.setAttribute('transform', rotate);
     textSvg.textContent = elementConfig.showUnits ? addUnits(pos) : pos;
     return textSvg;
@@ -378,6 +383,14 @@ var Rulez = function (config) {
   function isVertical() {
     return c.layout === 'vertical';
   }
+    
+  function isDefaultAlignment() {
+    return !(c.alignment === 'bottom' || c.alignment === 'right'); 
+  }  
+    
+  function getAlignmentOffset() {
+      return isVertical() ? c.width : c.height;
+  } 
 
   function mergeConfigs(def, cus, notOverrideDef) {
     if (!cus) {
