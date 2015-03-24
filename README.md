@@ -38,6 +38,30 @@ var rulez = new Rulez({
 });
 rulez.render();
 ````
+
+###Alignment
+
+Every horizontal ruler can be aligned to top or bottom (default is 'top'): 
+````js
+var someSvgElement = document.getElementById('someSvgElementId');
+var rulez = new Rulez({
+    element: someSvgElement,
+    alignment: 'bottom'
+});
+rulez.render();
+````
+
+Every vertical ruler can be aligned to left or right (default is 'left'): 
+````js
+var someSvgElement = document.getElementById('someSvgElementId');
+var rulez = new Rulez({
+    element: someSvgElement,
+    layout: 'vertical'
+    alignment: 'left'
+});
+rulez.render();
+````
+
 ###Customizing rulers
 Internally rulez.js use default config, but you can override it by passing more parameters in constructor.
 There is only one limitation to remember : maximum pixelGap used for divisions must be dividable by all other 
