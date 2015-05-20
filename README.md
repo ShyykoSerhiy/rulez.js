@@ -244,6 +244,26 @@ ruler.setScale(<left (top for vertical rulers) position in pixels>);
 ruler.setScale(100);
 ````
 
+###Text centering 
+Starting from v0.1.0 text elements are centered by default. 
+````js
+textDefaults: {
+    rotation: 0,
+    offset: 25,
+    className: 'rulez-text',
+    centerText: {
+        by: 'width',
+        operation: 'sum' //'sum' or 'sub'
+    } 
+}
+````
+Possible values for 'by': 
+* 'width' - calculations are made by accessing textElement.getBoundingClientRect().width property
+* 'height' - calculations are made by accessing textElement.getBoundingClientRect().height property
+Possible values for 'operation':
+* 'sum' textElement.getBoundingClientRect()[by]/2 will be added to original position
+* 'sub' textElement.getBoundingClientRect()[by]/2 will be subtracted  from original position
+
 ###Saving as image
 Ruler can be saved as image(png base64)
 ````js

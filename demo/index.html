@@ -30,7 +30,13 @@
         var rulezH = new Rulez({
             element: document.getElementById('svgH'),
             layout: 'horizontal',
-            alignment: 'bottom'
+            alignment: 'bottom',
+            textDefaults: {
+                centerText: {
+                    by: 'width',
+                    operation: 'sub' //'sum' or 'sub'
+                }
+            }
         });
         rulezH.render();
         var rulezV = new Rulez({
@@ -38,7 +44,11 @@
             layout: 'vertical',
             alignment: 'right',
             textDefaults: {
-                rotation: 90
+                rotation: -90,
+                centerText: {
+                    by: 'height',
+                    operation: 'sum' //'sum' or 'sub'
+                }
             },
             texts: [
                 {
