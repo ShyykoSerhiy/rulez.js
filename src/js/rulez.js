@@ -486,10 +486,19 @@ var Rulez = function (config) {
         var defaultAlignment = isDefaultAlignment();
         return defaultAlignment ? elementConfig.offset : getAlignmentOffset() - elementConfig.offset;
     }
-    
+
     function getCenterPosition(textElement, elementConfig) {
-        return textElement.origPos + (textElement.getBoundingClientRect()[elementConfig.centerText.by] / 2 *
-                (elementConfig.centerText.operation === 'sum' ? 1 : -1));
+        var boundingClientRect;
+        try {
+            boundingClientRect = textElement.getBoundingClientRect(); //@see https://github.com/ShyykoSerhiy/rulez.js/issues/14
+        } catch (e) {
+            boundingClientRect = {
+                width: 0,
+                    height: 0
+            };
+        }
+        return textElement.origPos + (boundingClientRect[elementConfig.centerText.by] / 2 *
+            (elementConfig.centerText.operation === 'sum' ? 1 : -1));
     }
 };
     
