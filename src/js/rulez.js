@@ -71,7 +71,7 @@ var Rulez = function (config) {
      * main group (g svg element) that contains all divisions and texts
      * @type {SVGGElement}
      */
-    var g = createGroup();
+    var g;
     /**
      * Array of arrays of all texts
      * @type {Array.<Array.<SVGTextElement >>}
@@ -98,17 +98,19 @@ var Rulez = function (config) {
      */
     var scale = 1;
 
-    c.width = c.width ? c.width : c.element.getBoundingClientRect().width;
-    c.height = c.height ? c.height : c.element.getBoundingClientRect().height;
-    c.element.appendChild(g);
-    var size = isVertical() ? c.height : c.width;
+    var size;
     var maxDistance = 0;
-    var unitConversionRate = getUnitConversionRate();
+    var unitConversionRate;
 
     /**
      * Renders ruler inside svg element
      */
     this.render = function () {
+        c.width || (c.width = c.element.getBoundingClientRect().width);
+        c.height || (c.height = c.element.getBoundingClientRect().height);
+        c.element.appendChild(g = createGroup());
+        size = isVertical() ? c.height : c.width;
+        unitConversionRate = getUnitConversionRate();
         calculateStartEndPosition();
         generateDivisionsAndTexts(startPosition, endPosition);
         this.scrollTo(0, false);
