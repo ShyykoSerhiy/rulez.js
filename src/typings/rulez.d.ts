@@ -14,12 +14,12 @@ declare module 'rulez.js' {
 		/**
 		 * Wherever to show or not to show units alongside text
 		 */
-		showUnits: boolean,
+		showUnits?: boolean,
 		centerText?: {
-			by: 'width'|'height',
-			operation: 'sub'|'sum'
+			by?: 'width'|'height',
+			operation?: 'sub'|'sum'
 		},
-		renderer: (el:Element)=>{}
+		renderer?: (el:Element)=>{}
 	}
 	export interface RulezConfig {
 		width?: number,
