@@ -1,6 +1,6 @@
 {
   "name": "rulez.js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Javascript library for showing svg customizable rulers",
   "main": "./src/js/rulez.js",
   "scripts": {
