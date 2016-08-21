@@ -165,6 +165,10 @@
                         text = addUnits(text);
                     }
                     textElement.textContent = text;
+                    if (textConfig.renderer) {
+                        textConfig.renderer(textElement);
+                    }
+
                     if (textConfig.centerText) {
                         centerText(textElement, textConfig);
                     }
