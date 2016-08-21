@@ -5,9 +5,10 @@ declare module 'rulez.js' {
 		className?: string,
 		pixelGap?: number,
 		lineLength?: number,
-		renderer?: (el:Element)=>{}
+		renderer?: (el:Element)=>void
 	}
 	export interface TextConfig {
+		pixelGap?: number,
 		rotation?: number,
 		offset?: number,
 		className?: string,
@@ -19,7 +20,7 @@ declare module 'rulez.js' {
 			by?: 'width'|'height',
 			operation?: 'sub'|'sum'
 		},
-		renderer?: (el:Element)=>{}
+		renderer?: (el:Element)=>void
 	}
 	export interface RulezConfig {
 		width?: number,
