@@ -2,6 +2,7 @@
   "name": "rulez.js",
   "version": "0.1.1",
   "description": "Javascript library for showing svg customizable rulers",
+  "main": "./src/js/rulez.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
