@@ -116,17 +116,19 @@
          */
         var scale = 1;
 
-        c.width = c.width ? c.width : c.element.getBoundingClientRect().width;
-        c.height = c.height ? c.height : c.element.getBoundingClientRect().height;
-        c.element.appendChild(g);
-        var size = isVertical() ? c.height : c.width;
+        var size;
         var maxDistance = 0;
-        var unitConversionRate = getUnitConversionRate();
+        var unitConversionRate;
 
         /**
          * Renders ruler inside svg element
          */
         this.render = function () {
+            c.width || (c.width = c.element.getBoundingClientRect().width);
+            c.height || (c.height = c.element.getBoundingClientRect().height);
+            c.element.appendChild(g = createGroup());
+            size = isVertical() ? c.height : c.width;
+            unitConversionRate = getUnitConversionRate();
             calculateStartEndPosition();
             generateDivisionsAndTexts(startPosition, endPosition);
             this.scrollTo(0, false);
