@@ -16,10 +16,7 @@ declare module 'rulez.js' {
 		 * Wherever to show or not to show units alongside text
 		 */
 		showUnits?: boolean,
-		centerText?: {
-			by?: 'width'|'height',
-			operation?: 'sub'|'sum'
-		},
+		centerText?: boolean,
 		renderer?: (el:Element)=>void
 	}
 	export interface RulezConfig {

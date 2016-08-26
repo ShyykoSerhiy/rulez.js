@@ -251,10 +251,7 @@ textDefaults: {
     rotation: 0,
     offset: 25,
     className: 'rulez-text',
-    centerText: {
-        by: 'width',
-        operation: 'sum' //'sum' or 'sub'
-    } 
+    centerText: true
 }
 ````
 Possible values for 'by': 

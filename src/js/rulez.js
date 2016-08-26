@@ -50,10 +50,7 @@
                  * Wherever to show or not to show units alongside text
                  */
                 showUnits: false,
-                centerText: {
-                    by: 'width', //width or height
-                    operation: 'sub' //'sum' or 'sub'
-                },
+                centerText: true,
                 renderer: null
             },
             divisions: [
@@ -167,10 +164,6 @@
                     textElement.textContent = text;
                     if (textConfig.renderer) {
                         textConfig.renderer(textElement);
-                    }
-
-                    if (textConfig.centerText) {
-                        centerText(textElement, textConfig);
                     }
                 }
             }
@@ -406,7 +399,7 @@
             rotateText(textSvg, elementConfig);
             textSvg.textContent = elementConfig.showUnits ? addUnits(pos) : pos;
             if (elementConfig.centerText) {
-                centerText(textSvg, elementConfig);
+                textSvg.setAttribute('text-anchor', 'middle');
             }
             return textSvg;
         }
@@ -483,22 +476,10 @@
             return width;
         }
 
-        function centerText(textElement, elementConfig) {
-            if (textElement.getBoundingClientRect) {
-                textElement.setAttribute(textElement.origPosAttribute, getCenterPosition(textElement, elementConfig) + '');
-                rotateText(textElement, elementConfig);
-            }
-        }
-
         function rotateText(textElement, elementConfig) {
             var rotate;
             var pos = textElement.origPos;
             var yPos = getTextPosY(elementConfig);
-            if (elementConfig.centerText) {
-                if (textElement.getBoundingClientRect) {
-                    pos = getCenterPosition(textElement, elementConfig);
-                }
-            }
             if (isVertical()) {
                 rotate = 'rotate(' + elementConfig.rotation + ' ' + (yPos * unitConversionRate) + ' ' + (pos * unitConversionRate) + ')';
             } else {
@@ -510,20 +491,6 @@
         function getTextPosY(elementConfig) {
             var defaultAlignment = isDefaultAlignment();
             return defaultAlignment ? elementConfig.offset : getAlignmentOffset() - elementConfig.offset;
-        }
-
-        function getCenterPosition(textElement, elementConfig) {
-            var boundingClientRect;
-            try {
-                boundingClientRect = textElement.getBoundingClientRect(); //@see https://github.com/ShyykoSerhiy/rulez.js/issues/14
-            } catch (e) {
-                boundingClientRect = {
-                    width: 0,
-                    height: 0
-                };
-            }
-            return textElement.origPos + (boundingClientRect[elementConfig.centerText.by] / 2 *
-                (elementConfig.centerText.operation === 'sum' ? 1 : -1));
         }
     };
     if (!noGlobal) {
