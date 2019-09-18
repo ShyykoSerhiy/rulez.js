@@ -82,7 +82,8 @@
                     pixelGap: 100
                 }
             ],
-            guides: []
+            guides: [],
+            guideSnapInterval: 10
         };
         var getDefaultConfigCopy = function () {
             var copy = JSON.parse(JSON.stringify(defaultConfig));
@@ -407,8 +408,31 @@
             var mouseMoveListener = function (e) {
                 e.preventDefault();
                 var pos = e[posPropName];
-                var diff = startPos - pos;
-                guideConfig.position = Math.round(startGuidePos - (diff * scale));   
+                var diff = startPos - pos;                
+                guideConfig.position = startGuidePos - (diff * scale);   
+                if (e.shiftKey) {
+                    // snap to the grid
+                    console.log('ZZZZZZZ')
+                    console.log('position', guideConfig.position)
+                    var halfSnap = c.guideSnapInterval / 2;
+                    console.log('halfSnap', halfSnap)
+                    var mod = guideConfig.position % c.guideSnapInterval;
+                    console.log('mod', mod)
+                    var absMod = Math.abs(mod);
+                    console.log('absMod', absMod)
+                    var diffSnap = mod;
+                    if (absMod > halfSnap) {
+                        console.log('bigger')
+                        diffSnap = Math.sign(mod) * (c.guideSnapInterval - absMod);
+                        console.log('diffSnap')
+                        guideConfig.position = Math.round(guideConfig.position + diffSnap);
+                    } else {
+                        guideConfig.position = Math.round(guideConfig.position - diffSnap);
+                    }
+                    console.log('newPosition', guideConfig.position);
+                } else {
+                    guideConfig.position = Math.round(guideConfig.position);
+                }
                 movePositionElement(e);
                 moveGuide(guide, guideConfig);
             };

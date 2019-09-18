@@ -38,7 +38,8 @@ declare module 'rulez.js' {
 		guideDefaults: GuideConfig,
 		divisions?: DivisionConfig[],
 		texts?: TextConfig[],
-		guides? : GuideConfig[]
+		guides?: GuideConfig[],
+		guideSnapInterval?: number
 	}
 	class Rulez {
 		constructor(config:RulezConfig);
