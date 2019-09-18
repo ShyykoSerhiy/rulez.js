@@ -1,1 +1,1 @@
-.rulez-line{stroke:grey;stroke-width:1}.rulez-rect{fill:grey}.rulez-text{font-size:8px;fill:#d3d3d3}
+.rulez-guide-vert,.rulez-guide-vert-global{cursor:row-resize}.rulez-line{stroke:grey;stroke-width:1}.rulez-guide-vert,.rulez-rect{fill:grey}.rulez-guide-horiz{fill:grey;cursor:col-resize}.rulez-guide-horiz-global{cursor:col-resize}.rulez-text{font-size:8px;fill:#d3d3d3}.rulez-position-element{position:absolute;background-color:#000;color:grey;font-size:8px}

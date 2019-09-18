@@ -55,7 +55,7 @@
             },
             guideDefaults: {
                 strokeWidth: 1,
-                getSize: () => {
+                getSize: function() {
                     return 5000;
                 }
             },
@@ -84,11 +84,11 @@
             ],
             guides: []
         };
-        var getDefaultConfigCopy = function (){
+        var getDefaultConfigCopy = function () {
             var copy = JSON.parse(JSON.stringify(defaultConfig));
-            copy.guideDefaults.getSize = defaultConfig.guideDefaults.getSize
+            copy.guideDefaults.getSize = defaultConfig.guideDefaults.getSize;
             return copy;
-        }
+        };
 
         /**
          * result config
@@ -208,7 +208,7 @@
                     }
                 }
             }
-            for (var i = 0; i < guides.length; i++) {
+            for (i = 0; i < guides.length; i++) {
                 moveGuide(guides[i], c.guides[i]);
             }
         };
@@ -246,7 +246,7 @@
 
         this.getGuideConfigs = function () {
             return JSON.parse(JSON.stringify(c.guides));
-        }
+        };
 
         /**
          * Callback that is called after saving of ruler as image is done
@@ -402,7 +402,7 @@
                 positionElement.innerText = positionPrefix + guideConfig.position;
                 positionElement.style.left = e.pageX + leftPositionMargin + 'px';
                 positionElement.style.top = e.pageY + topPositionMargin + 'px';
-            }
+            };
 
             var mouseMoveListener = function (e) {
                 e.preventDefault();
@@ -410,14 +410,14 @@
                 var diff = startPos - pos;
                 guideConfig.position = Math.round(startGuidePos - (diff * scale));   
                 movePositionElement(e);
-                moveGuide(guide, guideConfig)
-            }
+                moveGuide(guide, guideConfig);
+            };
             var mouseUpListener = function (e) {
                 document.body.classList.remove(globalClassName);
                 document.body.removeChild(positionElement);
                 document.removeEventListener('mousemove', mouseMoveListener);
                 document.removeEventListener('mouseup', mouseUpListener);
-            }
+            };
             guide.addEventListener('mousedown', function (e) {
                 e.stopPropagation();
                 document.body.classList.add(globalClassName);
@@ -439,7 +439,7 @@
             });
             c.guides = c.guides.filter(function (gConfig) {
                 return gConfig !== guideConfig;
-            })
+            });
             guide.parentNode.removeChild(guide);
         }
 
@@ -526,11 +526,11 @@
                 width = 'width';
             }
             
-            var alignment = (typeof alignment !== 'undefined') ? alignment : (defaultAlignment ? '0' : getAlignmentOffset() - lineLength);
+            var alignmentValue = (typeof alignment !== 'undefined') ? alignment : (defaultAlignment ? '0' : getAlignmentOffset() - lineLength);
             
             line.setAttribute('class', className);
             line.setAttribute(x, addUnits(pos));
-            line.setAttribute(y, addUnits(alignment));
+            line.setAttribute(y, addUnits(alignmentValue));
             line.setAttribute(height, addUnits(lineLength));
             line.setAttribute(width, addUnits(strokeWidth));
             return line;
