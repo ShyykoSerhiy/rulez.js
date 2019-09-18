@@ -53,6 +53,12 @@
                 centerText: true,
                 renderer: null
             },
+            guideDefaults: {
+                strokeWidth: 1,
+                getSize: () => {
+                    return 5000;
+                }
+            },
             divisions: [
                 {
                     pixelGap: 5,
@@ -75,12 +81,27 @@
                 {
                     pixelGap: 100
                 }
-            ]
+            ],
+            guides: []
         };
+        var getDefaultConfigCopy = function (){
+            var copy = JSON.parse(JSON.stringify(defaultConfig));
+            copy.guideDefaults.getSize = defaultConfig.guideDefaults.getSize
+            return copy;
+        }
+
         /**
          * result config
          */
-        var c = mergeConfigs(JSON.parse(JSON.stringify(defaultConfig)), config);
+        var c = mergeConfigs(getDefaultConfigCopy(), config);
+        if (!c.guideDefaults.className) {
+            if (isVertical()) {
+                c.guideDefaults.className = 'rulez-guide-vert';
+            } else {
+                c.guideDefaults.className = 'rulez-guide-horiz';
+            }
+        }
+        c = mergeConfigs(c, c);
         /**
          * amount of additional(redundant) divisions on left and right (top, bottom) side of ruler
          */
@@ -95,6 +116,11 @@
          * @type {Array.<Array.<SVGTextElement >>}
          */
         var texts = [];
+        /**
+         * Array of all guides
+         * @type {Array.<SVGTextElement>}
+         */
+        var guides = [];
         /**
          * Current position of ruler
          * @type {number}
@@ -131,7 +157,20 @@
             unitConversionRate = getUnitConversionRate();
             calculateStartEndPosition();
             generateDivisionsAndTexts(startPosition, endPosition);
+            generateGuides();
             this.scrollTo(0, false);
+
+
+            c.element.addEventListener('dblclick', function (e) {
+                var position = isVertical() ? e.offsetY : e.offsetX;
+                position = (currentPosition + position) * scale;
+
+                var guideConfig = Object.assign({
+                    position: position
+                }, c.guideDefaults);
+                c.guides.push(guideConfig);
+                createGuideFromConfig(guideConfig);
+            });
         };
 
         /**
@@ -169,6 +208,9 @@
                     }
                 }
             }
+            for (var i = 0; i < guides.length; i++) {
+                moveGuide(guides[i], c.guides[i]);
+            }
         };
 
         /**
@@ -186,7 +228,7 @@
          */
         this.resize = function () {
             var oldSize = size;
-            var newSize = isVertical() ? c.element.clientHeight : c.element.clientWidth;
+            var newSize = isVertical() ? c.element.clientHeight : c.element.clientWidth;  
             if (oldSize !== newSize) {
                 if (oldSize > newSize) {
                     //todo remove redundant divisions?
@@ -198,7 +240,13 @@
                     this.scrollTo(currentPosition, false);
                 }
             }
+            
+            //FIXME guide resize
         };
+
+        this.getGuideConfigs = function () {
+            return JSON.parse(JSON.stringify(c.guides));
+        }
 
         /**
          * Callback that is called after saving of ruler as image is done
@@ -310,6 +358,95 @@
             }
         }
 
+        function generateGuides() {
+            c.guides.forEach(function (guideConfig) {
+                createGuideFromConfig(guideConfig);
+            });
+        }
+
+        function createGuideFromConfig(guideConfig) {
+            var guide = generateGuide(guideConfig);
+            guides.push(guide);
+
+            makeMovable(guide, guideConfig);
+
+            g.appendChild(guide);
+            if (guideConfig.renderer) {
+                guideConfig.renderer(guide);
+            }
+        }
+
+        function moveGuide(guide, guideConfig) {        
+            var offset = (-currentPosition) % (maxDistance * unitConversionRate);
+            var position = guideConfig.position / scale - currentPosition - offset ;
+            guide.setAttribute('transform', isVertical() ? 'translate(0,' + position + ')' : 'translate(' + position + ',0)');
+        }
+        
+        /**
+         * 
+         * @param {SVGElement} guide 
+         */
+        function makeMovable(guide, guideConfig) {
+            var startPos;
+            var startGuidePos = guideConfig.position;
+            var isVerticalRuler = isVertical();  
+            var posPropName = isVerticalRuler ? 'pageY' : 'pageX';
+            var globalClassName = isVerticalRuler ? 'rulez-guide-vert-global' : 'rulez-guide-horiz-global';
+            var positionPrefix = isVerticalRuler ? 'Y : ' : 'X : ';
+            var leftPositionMargin = isVerticalRuler ? 10 : 0;
+            var topPositionMargin = isVerticalRuler ? 0 : 10;
+            var positionElement = document.createElement('span');    
+            positionElement.classList.add('rulez-position-element');
+            
+            var movePositionElement = function(e) {
+                positionElement.innerText = positionPrefix + guideConfig.position;
+                positionElement.style.left = e.pageX + leftPositionMargin + 'px';
+                positionElement.style.top = e.pageY + topPositionMargin + 'px';
+            }
+
+            var mouseMoveListener = function (e) {
+                e.preventDefault();
+                var pos = e[posPropName];
+                var diff = startPos - pos;
+                guideConfig.position = Math.round(startGuidePos - (diff * scale));   
+                movePositionElement(e);
+                moveGuide(guide, guideConfig)
+            }
+            var mouseUpListener = function (e) {
+                document.body.classList.remove(globalClassName);
+                document.body.removeChild(positionElement);
+                document.removeEventListener('mousemove', mouseMoveListener);
+                document.removeEventListener('mouseup', mouseUpListener);
+            }
+            guide.addEventListener('mousedown', function (e) {
+                e.stopPropagation();
+                document.body.classList.add(globalClassName);
+                startPos = e[posPropName];
+                startGuidePos = guideConfig.position;
+                movePositionElement(e);
+                document.body.appendChild(positionElement);
+                document.addEventListener('mouseup', mouseUpListener);
+                document.addEventListener('mousemove', mouseMoveListener);
+            }, true);
+            guide.addEventListener('dblclick', function () {
+                removeGuide(guide, guideConfig);
+            });
+        }
+
+        function removeGuide(guide, guideConfig) {
+            guides = guides.filter(function (g) {
+                return g !== guide;
+            });
+            c.guides = c.guides.filter(function (gConfig) {
+                return gConfig !== guideConfig;
+            })
+            guide.parentNode.removeChild(guide);
+        }
+
+        function generateGuide(guideConfig) {
+            return _createGuideRect(guideConfig);
+        }
+
         function generateTexts(startPosition, endPosition, elementConfig) {
             var texts = [];
             for (var i = startPosition; i < endPosition; i += elementConfig.pixelGap) {
@@ -334,7 +471,21 @@
             }
         }
 
+        function _createGuideRect(guideConfig) {
+            var guide = _createRectGeneral(0, guideConfig.className, guideConfig.getSize(guideConfig), guideConfig.strokeWidth, 0);
+            moveGuide(guide, guideConfig);
+            return guide;
+        }
+
         function _createLine(pos, elementConfig) {
+            return _createLineGeneral(pos, elementConfig.className, elementConfig.lineLength, elementConfig.strokeWidth);
+        }
+
+        function _createRect(pos, elementConfig) {
+            return _createRectGeneral(pos, elementConfig.className, elementConfig.lineLength, elementConfig.strokeWidth);
+        }
+
+        function _createLineGeneral(pos, className, lineLength, strokeWidth) {
             var line = window.document.createElementNS(svgNS, 'line');
             var defaultAlignment = isDefaultAlignment();
             var x1, x2, y1, y2;
@@ -350,16 +501,16 @@
                 y2 = 'y2';
             }
 
-            line.setAttribute('class', elementConfig.className);
+            line.setAttribute('class', className);
             line.setAttribute(x1, addUnits(pos));
             line.setAttribute(x2, addUnits(pos));
-            line.setAttribute(y1, addUnits(defaultAlignment ? '0' : getAlignmentOffset() - elementConfig.lineLength));
-            line.setAttribute(y2, addUnits(defaultAlignment ? elementConfig.lineLength : getAlignmentOffset()));
-            line.setAttribute('stroke-width', addUnits(elementConfig.strokeWidth));
+            line.setAttribute(y1, addUnits(defaultAlignment ? '0' : getAlignmentOffset() - lineLength));
+            line.setAttribute(y2, addUnits(defaultAlignment ? lineLength : getAlignmentOffset()));
+            line.setAttribute('stroke-width', addUnits(strokeWidth));
             return line;
         }
 
-        function _createRect(pos, elementConfig) {
+        function _createRectGeneral(pos, className, lineLength, strokeWidth, alignment) {
             var line = window.document.createElementNS(svgNS, 'rect');
             var defaultAlignment = isDefaultAlignment();
             var x, y, height, width;
@@ -374,11 +525,14 @@
                 height = 'height';
                 width = 'width';
             }
-            line.setAttribute('class', elementConfig.className);
+            
+            var alignment = (typeof alignment !== 'undefined') ? alignment : (defaultAlignment ? '0' : getAlignmentOffset() - lineLength);
+            
+            line.setAttribute('class', className);
             line.setAttribute(x, addUnits(pos));
-            line.setAttribute(y, addUnits(defaultAlignment ? '0' : getAlignmentOffset() - elementConfig.lineLength));
-            line.setAttribute(height, addUnits(elementConfig.lineLength));
-            line.setAttribute(width, addUnits(elementConfig.strokeWidth));
+            line.setAttribute(y, addUnits(alignment));
+            line.setAttribute(height, addUnits(lineLength));
+            line.setAttribute(width, addUnits(strokeWidth));
             return line;
         }
 
@@ -432,6 +586,7 @@
                     switch (param) {
                         case 'divisionDefaults':
                         case 'textDefaults':
+                        case 'guideDefaults':
                             mergeConfigs(def[param], cus[param]);
                             break;
                         default :
@@ -452,6 +607,11 @@
             if (def.texts) {
                 def.texts.forEach(function (entry) {
                     mergeConfigs(entry, def.textDefaults, entry);
+                });
+            }
+            if (def.guides) {
+                def.guides.forEach(function (entry) {
+                    mergeConfigs(entry, def.guideDefaults, entry);
                 });
             }
 

@@ -7,6 +7,13 @@ declare module 'rulez.js' {
 		lineLength?: number,
 		renderer?: (el:Element)=>void
 	}
+	export interface GuideConfig {
+		strokeWidth?: number,
+		className?: string,
+		renderer?: (el: Element) => void,
+		getSize?: (guideConfig: GuideConfig) => number;
+		position: number
+	}
 	export interface TextConfig {
 		pixelGap?: number,
 		rotation?: number,
@@ -28,8 +35,10 @@ declare module 'rulez.js' {
 		units?: 'em'|'ex'|'px'|'pt'|'pc'|'cm'|'mm'|'in'|'',
 		divisionDefaults?: DivisionConfig,
 		textDefaults?: TextConfig,
+		guideDefaults: GuideConfig,
 		divisions?: DivisionConfig[],
-		texts?: TextConfig[]
+		texts?: TextConfig[],
+		guides? : GuideConfig[]
 	}
 	class Rulez {
 		constructor(config:RulezConfig);

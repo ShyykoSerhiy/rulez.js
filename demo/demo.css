@@ -61,3 +61,8 @@ body {
     height: 60px;
     z-index: 10;
 }
+
+#svgV,
+#svgH {
+    overflow: visible;
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
@@ -7,24 +8,26 @@
     <link type="text/css" rel="stylesheet" href="demo.css">
     <link type="text/css" rel="stylesheet" href="../src/css/rulez-black.css">
 </head>
-<body style="margin: 0;">
-<div class="black-rect"></div>
-<div class="ruler-horizontal">
-    <svg id="svgH" xmlns="http://www.w3.org/2000/svg"></svg>
-</div>
-<div class="ruler-vertical">
-    <svg id="svgV" xmlns="http://www.w3.org/2000/svg"></svg>
-</div>
-<div class="content">
-    <button id="updateSize">update size</button>
-    zoom <input id="zoom" type="range" min="0" max="10" step="0.01" value="1"/><label id="zoomLabel">1</label>
 
-    <div id="scroll" style="">
-        <div style="width: 9000px; height: 9000px;">
-            <img id="img"
-                 src="demo.png"/>
+<body style="margin: 0;">
+    <div class="black-rect"></div>
+    <div class="content">
+        <button id="updateSize">update size</button>
+        zoom <input id="zoom" min="0" max="10" step="0.01" value="1" /><label id="zoomLabel">1</label>
+
+        <div id="scroll" style="">
+            <div style="width: 9000px; height: 9000px;">
+                <img id="img" src="demo.png" />
+            </div>
         </div>
     </div>
+    <div class="ruler-horizontal">
+        <svg id="svgH" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="ruler-vertical">
+        <svg id="svgV" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
     <script>
 
         var rulezH = new Rulez({
@@ -34,7 +37,15 @@
             textDefaults: {
                 rotation: -90,
                 centerText: true
-            }
+            },
+            guides: [
+                {
+                    position: 200                
+                },
+                {
+                    position: 400                
+                }
+            ]
         });
         rulezH.render();
         var rulezV = new Rulez({
@@ -53,6 +64,14 @@
                     pixelGap: 100,
                     offset: 20
                 }
+            ],
+            guides: [
+                {
+                    position: 200                
+                },
+                {
+                    position: 400                
+                }
             ]
         });
         rulezV.render();
@@ -63,7 +82,7 @@
         });
 
         document.getElementById('updateSize').addEventListener('click', function () {
-            rulezH.saveAsImage(function(imgs){
+            rulezH.saveAsImage(function (imgs) {
                 img.src = imgs;
             });
             rulezH.resize();
@@ -73,6 +92,7 @@
         var imgWidth = 0;
         var imgHeight = 0;
         var zoomLabel = document.getElementById('zoomLabel');
+
         document.getElementById('zoom').addEventListener('change', function (event) {
             if (!imgWidth) {
                 imgWidth = img.width;
@@ -86,7 +106,6 @@
             zoomLabel.innerHTML = scale;
         });
     </script>
-</div>
-
 </body>
+
 </html>
