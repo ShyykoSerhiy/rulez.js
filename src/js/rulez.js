@@ -229,7 +229,7 @@
          */
         this.resize = function () {
             var oldSize = size;
-            var newSize = isVertical() ? c.element.clientHeight : c.element.clientWidth;  
+            var newSize = isVertical() ? c.element.clientHeight : c.element.clientWidth;
             if (oldSize !== newSize) {
                 if (oldSize > newSize) {
                     //todo remove redundant divisions?
@@ -241,7 +241,7 @@
                     this.scrollTo(currentPosition, false);
                 }
             }
-            
+
             //FIXME guide resize
         };
 
@@ -377,28 +377,28 @@
             }
         }
 
-        function moveGuide(guide, guideConfig) {        
+        function moveGuide(guide, guideConfig) {
             var offset = (-currentPosition) % (maxDistance * unitConversionRate);
             var position = guideConfig.position / scale - currentPosition - offset ;
             guide.setAttribute('transform', isVertical() ? 'translate(0,' + position + ')' : 'translate(' + position + ',0)');
         }
-        
+
         /**
-         * 
-         * @param {SVGElement} guide 
+         *
+         * @param {SVGElement} guide
          */
         function makeMovable(guide, guideConfig) {
             var startPos;
             var startGuidePos = guideConfig.position;
-            var isVerticalRuler = isVertical();  
+            var isVerticalRuler = isVertical();
             var posPropName = isVerticalRuler ? 'pageY' : 'pageX';
             var globalClassName = isVerticalRuler ? 'rulez-guide-vert-global' : 'rulez-guide-horiz-global';
             var positionPrefix = isVerticalRuler ? 'Y : ' : 'X : ';
             var leftPositionMargin = isVerticalRuler ? 10 : 0;
             var topPositionMargin = isVerticalRuler ? 0 : 10;
-            var positionElement = document.createElement('span');    
+            var positionElement = document.createElement('span');
             positionElement.classList.add('rulez-position-element');
-            
+
             var movePositionElement = function(e) {
                 positionElement.innerText = positionPrefix + guideConfig.position;
                 positionElement.style.left = e.pageX + leftPositionMargin + 'px';
@@ -408,8 +408,8 @@
             var mouseMoveListener = function (e) {
                 e.preventDefault();
                 var pos = e[posPropName];
-                var diff = startPos - pos;                
-                guideConfig.position = startGuidePos - (diff * scale);   
+                var diff = startPos - pos;
+                guideConfig.position = startGuidePos - (diff * scale);
                 if (e.shiftKey) {
                     // snap to the grid
                     var halfSnap = c.guideSnapInterval / 2;
@@ -520,7 +520,10 @@
             line.setAttribute('class', className);
             line.setAttribute(x1, addUnits(pos));
             line.setAttribute(x2, addUnits(pos));
-            line.setAttribute(y1, addUnits(defaultAlignment ? '0' : getAlignmentOffset() - lineLength));
+            line.setAttribute(
+                y1,
+                addUnits(defaultAlignment ? '0' : getCalculateOffsetByUnit(lineLength))
+            );
             line.setAttribute(y2, addUnits(defaultAlignment ? lineLength : getAlignmentOffset()));
             line.setAttribute('stroke-width', addUnits(strokeWidth));
             return line;
@@ -541,9 +544,9 @@
                 height = 'height';
                 width = 'width';
             }
-            
-            var alignmentValue = (typeof alignment !== 'undefined') ? alignment : (defaultAlignment ? '0' : getAlignmentOffset() - lineLength);
-            
+
+            var alignmentValue = (typeof alignment !== 'undefined') ? alignment : (defaultAlignment ? '0' : getCalculateOffsetByUnit(lineLength));
+
             line.setAttribute('class', className);
             line.setAttribute(x, addUnits(pos));
             line.setAttribute(y, addUnits(alignmentValue));
@@ -574,6 +577,10 @@
                 textSvg.setAttribute('text-anchor', 'middle');
             }
             return textSvg;
+        }
+
+        function getCalculateOffsetByUnit(lineLength) {
+            return (getAlignmentOffset() - lineLength) / unitConversionRate;
         }
 
         function createGroup() {
@@ -668,7 +675,7 @@
 
         function getTextPosY(elementConfig) {
             var defaultAlignment = isDefaultAlignment();
-            return defaultAlignment ? elementConfig.offset : getAlignmentOffset() - elementConfig.offset;
+            return defaultAlignment ? elementConfig.offset : getCalculateOffsetByUnit(elementConfig.offset);
         }
     };
     if (!noGlobal) {
@@ -677,4 +684,4 @@
     return Rulez;
 }));
 
-    
+
