@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/ShyykoSerhiy/rulez.js",
   "devDependencies": {
-    "grunt": "^0.4.5",
+    "grunt": "^1.5.3",
     "grunt-bump": "^0.1.0",
     "grunt-contrib-cssmin": "^0.11.0",
     "grunt-contrib-jshint": "^0.11.0",
